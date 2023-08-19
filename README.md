@@ -6,6 +6,8 @@ A working bit-perfect ROM can be built by running build.bat.
 Assembler (64tass) is bundled with the disassembly.
 No installation of other tools required.
 
+To check if the built ROM is bit-perfect run compare.bat.
+
 I chose 64tass and not any other popular assembler (asm6 or nesasm)
 because I want the disassembly to be more "user friendly"
 (check out [64tass documentation](https://tass64.sourceforge.net/)
