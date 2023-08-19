@@ -18,7 +18,7 @@ for all the features it can offer, for example the user can use custom
 encodings to map characters and escape sequences to byte values and
 many more).
 
-# This disassembly is WIP
+## This disassembly is WIP
 There are a lot of TODOs, not-yet-decompiled code and most of the code and data
 still needs to be documented.
 
