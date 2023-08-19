@@ -1,4 +1,5 @@
 # Godzilla: Monster of Monsters disassembly
+This project is not for portfolio purposes.
 A (WIP) disassembly of the "Godzilla: Monster of Monsters" (USA/international version) game on the NES.
 
 ## How to use
