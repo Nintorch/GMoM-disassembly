@@ -1,5 +1,6 @@
 # Godzilla: Monster of Monsters disassembly
-This project is not for portfolio purposes.
+This project is not for JustMe's portfolio purposes.
+
 A (WIP) disassembly of the "Godzilla: Monster of Monsters" (USA/international version) game on the NES.
 
 ## How to use
@@ -7,7 +8,8 @@ A working bit-perfect ROM can be built by running build.bat.
 Assembler (64tass) is bundled with the disassembly.
 No installation of other tools required.
 
-To check if the built ROM is bit-perfect run compare.bat.
+To check if the built ROM is bit-perfect, add the GMoM (USA) ROM into your directory
+where you unzipped/cloned the disassembly under the name of "rom.nes" and run compare.bat.
 
 I chose 64tass and not any other popular assembler (asm6 or nesasm)
 because I want the disassembly to be more "user friendly"
