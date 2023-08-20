@@ -5,10 +5,10 @@
 			.logical $8000
 			BankHeader 5
 
-Goto_SkyMappings_L:
-			.addr SkyMappings
-Goto_SkyMappings_H:
-			.addr SkyMappings+PlanetCount
+PRG05_Goto_SkyMappings_L:
+			.addr PRG05_SkyMappings
+PRG05_Goto_SkyMappings_H:
+			.addr PRG05_SkyMappings+PlanetCount
 
 			.byte $d4, $86, $f3, $86	; $8008: d4 86 f3 86	 Data
 			.byte $43, $87, $6e, $87	; $800c: 43 87 6e 87	 Data
@@ -135,7 +135,7 @@ Goto_SkyMappings_H:
 			.byte $93, $a3
 
 		; TODO: table
-SkyMappings:
+PRG05_SkyMappings:
 			.byte $02, $92, $2d, $d1
 			.byte $6b, $fa, $a1, $33
 
@@ -4108,6 +4108,5 @@ SkyMappings:
 			.byte $78, $d8, $ee, $df	; $bfd8: 78 d8 ee df	 Data
 			.byte $ff, $4c, $00, $c0	; $bfdc: ff 4c 00 c0	 Data
 			
-			BankEnding
 			BankEnd
 			.endlogical

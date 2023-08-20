@@ -41,6 +41,17 @@ BankHeader .segment id
 	.endsegment
 
 BankEnd .segment
+	.if LastBank != (PRGBankCount-1)
+			.text "GODZILLA        "
+
+			.byte $00, $00, $00, $00	; $bff0: 00 00 00 00	 Data
+			.byte $33, $04, $01, $10	; $bff4: 33 04 01 10	 Data
+			.byte $00, $00
+			.addr Main_ffd8
+			.addr Main_ffd8
+			.addr Main_ffd8
+	.endif
+
 	BankEndAddress .var (BankStartAddress + PRGBankSize) & $FFFF
 	.if (BankStartAddress < BankEndAddress && * > BankEndAddress) || (BankStartAddress > BankEndAddress && * > BankEndAddress && * < BankStartAddress)
 		.error "Bank ", repr(LastBank), " is too big (", *, ")"
@@ -52,17 +63,6 @@ BankEnd .segment
 
 	.align PRGBankSize
 	.endsegment
-
-BankEnding .macro
-			.text "GODZILLA        "
-
-			.byte $00, $00, $00, $00	; $bff0: 00 00 00 00	 Data
-			.byte $33, $04, $01, $10	; $bff4: 33 04 01 10	 Data
-			.byte $00, $00
-			.addr L_ffd8
-			.addr L_ffd8
-			.addr L_ffd8
-	.endm
 
 ;	CHR Bankswitching
 ;	(Note that Sub_CHRBankSwitch1 and Sub_CHRBankSwitch2 (mainbank.asm)
@@ -120,7 +120,7 @@ GameTextEnd .macro
 ;-------------------------------------------------------------------------------
 
 MusicFadeOut .macro
-		CrossBankJump 0, a_Goto_MusicFadeOut
+		CrossBankJump 0, Sound_Goto_MusicFadeOut
 	.endm
 
 ;-------------------------------------------------------------------------------
@@ -133,16 +133,15 @@ MusicFadeOut .macro
 TableOffset .var 0
 
 ;	Start a new table
-TableStart .segment offset=0, label_offset=0
+TableStart .segment offset=0
 CurrentTable .var []
 TableOffset .var \offset
-TableLabelOffset .var \label_offset
 	.endsegment
 
 ;	Insert a label into the table and return its id
 TableInsert .segment
 _CurrentID .var len(CurrentTable)+TableOffset
-CurrentTable ..= [\@]+TableLabelOffset
+CurrentTable ..= [\@]
 	.endsegment _CurrentID
 
 ;-------------------------------------------------------------------------------

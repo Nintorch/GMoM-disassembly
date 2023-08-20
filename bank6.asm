@@ -12,20 +12,21 @@
 ;	Cross bank jump labels
 ;-------------------------------------------------------------------------------
 
-			jmp g_aa8f			; $800a: 4c 8f aa
+			jmp PRG06_aa8f			; $800a: 4c 8f aa
 
 ;-------------------------------------------------------------------------------
-g_800d:		jmp g_be98			; $800d: 4c 98 be
+PRG06_800d:
+			jmp PRG06_be98			; $800d: 4c 98 be
 
 ;-------------------------------------------------------------------------------
-Goto_g_GM_Credits:
-			jmp g_GM_Credits			; $8010: 4c 6f b9
+PRG06_Goto_GM_Credits:
+			jmp PRG06_GM_Credits			; $8010: 4c 6f b9
 
 ;-------------------------------------------------------------------------------
-			jmp g_bb43			; $8013: 4c 43 bb
+			jmp PRG06_bb43			; $8013: 4c 43 bb
 
 ;-------------------------------------------------------------------------------
-			jmp g_bcaa			; $8016: 4c aa bc
+			jmp PRG06_bcaa			; $8016: 4c aa bc
 
 ;-------------------------------------------------------------------------------
 ;	The bank code
@@ -432,7 +433,8 @@ Goto_g_GM_Credits:
 			.byte $f6, $00, $84, $85	; $8651: f6 00 84 85	 Data
 			.byte $86, $87, $88, $89	; $8655: 86 87 88 89	 Data
 			.byte $8a	; $8659: 8a			Data
-g_865a:		.byte $8b, $8c, $8d, $2b	; $865a: 8b 8c 8d 2b	 Data
+PRG06_865a:
+			.byte $8b, $8c, $8d, $2b	; $865a: 8b 8c 8d 2b	 Data
 			.byte $62, $33, $38, $37	; $865e: 62 33 38 37	 Data
 			.byte $37, $6c, $69, $01	; $8662: 37 6c 69 01	 Data
 			.byte $01, $01, $01, $01	; $8666: 01 01 01 01	 Data
@@ -607,7 +609,8 @@ g_865a:		.byte $8b, $8c, $8d, $2b	; $865a: 8b 8c 8d 2b	 Data
 			.byte $13, $0e, $0f, $10	; $890a: 13 0e 0f 10	 Data
 			.byte $0b, $0c, $0d, $13	; $890e: 0b 0c 0d 13	 Data
 			.byte $05	; $8912: 05			Data
-g_8913:		.byte $06, $07, $08, $16	; $8913: 06 07 08 16	 Data
+PRG06_8913:
+			.byte $06, $07, $08, $16	; $8913: 06 07 08 16	 Data
 			.byte $17, $18, $13, $09	; $8917: 17 18 13 09	 Data
 			.byte $0a, $0e, $0f, $10	; $891b: 0a 0e 0f 10	 Data
 			.byte $09, $0a, $1b, $1c	; $891f: 09 0a 1b 1c	 Data
@@ -658,7 +661,8 @@ g_8913:		.byte $06, $07, $08, $16	; $8913: 06 07 08 16	 Data
 			.byte $00, $00, $0a, $0a	; $89d3: 00 00 0a 0a	 Data
 			.byte $14, $16, $18, $1a	; $89d7: 14 16 18 1a	 Data
 			.byte $fc, $00, $2f, $00	; $89db: fc 00 2f 00	 Data
-g_89df:		.byte $3f, $3a, $00, $00	; $89df: 3f 3a 00 00	 Data
+PRG06_89df:
+			.byte $3f, $3a, $00, $00	; $89df: 3f 3a 00 00	 Data
 			.byte $03, $0b, $17, $10	; $89e3: 03 0b 17 10	 Data
 			.byte $00, $00, $fd, $00	; $89e7: 00 00 fd 00	 Data
 			.byte $2e, $3a, $3e, $00	; $89eb: 2e 3a 3e 00	 Data
@@ -675,7 +679,8 @@ g_89df:		.byte $3f, $3a, $00, $00	; $89df: 3f 3a 00 00	 Data
 			.byte $00, $0a, $0a, $0d	; $8a17: 00 0a 0a 0d	 Data
 			.byte $1d, $1a, $00, $fd	; $8a1b: 1d 1a 00 fd	 Data
 			.byte $00, $30	; $8a1f: 00 30		 Data
-g_8a21:		.byte $40, $41, $00, $00	; $8a21: 40 41 00 00	 Data
+PRG06_8a21:
+			.byte $40, $41, $00, $00	; $8a21: 40 41 00 00	 Data
 			.byte $03, $0b, $17, $10	; $8a25: 03 0b 17 10	 Data
 			.byte $1a, $00, $f9, $00	; $8a29: 1a 00 f9 00	 Data
 			.byte $24, $00, $27, $00	; $8a2d: 24 00 27 00	 Data
@@ -802,7 +807,8 @@ g_8a21:		.byte $40, $41, $00, $00	; $8a21: 40 41 00 00	 Data
 			.byte $80, $87, $88, $00	; $8c11: 80 87 88 00	 Data
 			.byte $00, $0a, $0a, $5d	; $8c15: 00 0a 0a 5d	 Data
 			.byte $5d	; $8c19: 5d			Data
-g_8c1a:		.byte $6a, $6a, $fd, $00	; $8c1a: 6a 6a fd 00	 Data
+PRG06_8c1a:
+			.byte $6a, $6a, $fd, $00	; $8c1a: 6a 6a fd 00	 Data
 			.byte $30, $40, $41, $00	; $8c1e: 30 40 41 00	 Data
 			.byte $00, $4c, $0f, $55	; $8c22: 00 4c 0f 55	 Data
 			.byte $10, $65, $00, $fd	; $8c26: 10 65 00 fd	 Data
@@ -831,7 +837,8 @@ g_8c1a:		.byte $6a, $6a, $fd, $00	; $8c1a: 6a 6a fd 00	 Data
 			.byte $03, $03, $0c, $03	; $8c82: 03 03 0c 03	 Data
 			.byte $03, $03, $03, $03	; $8c86: 03 03 03 03	 Data
 			.byte $01, $02, $03, $03	; $8c8a: 01 02 03 03	 Data
-g_8c8e:		.byte $03, $05, $08, $09	; $8c8e: 03 05 08 09	 Data
+PRG06_8c8e:
+			.byte $03, $05, $08, $09	; $8c8e: 03 05 08 09	 Data
 			.byte $03, $03, $03, $03	; $8c92: 03 03 03 03	 Data
 			.byte $03, $03, $03, $03	; $8c96: 03 03 03 03	 Data
 			.byte $03, $03, $03, $03	; $8c9a: 03 03 03 03	 Data
@@ -1088,7 +1095,8 @@ g_8c8e:		.byte $03, $05, $08, $09	; $8c8e: 03 05 08 09	 Data
 			.byte $18, $19, $1c, $25	; $9086: 18 19 1c 25	 Data
 			.byte $fe, $00, $27, $28	; $908a: fe 00 27 28	 Data
 			.byte $32	; $908e: 32			Data
-g_908f:		.byte $21, $2e, $38, $32	; $908f: 21 2e 38 32	 Data
+PRG06_908f:
+			.byte $21, $2e, $38, $32	; $908f: 21 2e 38 32	 Data
 			.byte $2f, $3d, $3e, $0a	; $9093: 2f 3d 3e 0a	 Data
 			.byte $0b, $10, $11, $0c	; $9097: 0b 10 11 0c	 Data
 			.byte $0d, $d5, $24, $16	; $909b: 0d d5 24 16	 Data
@@ -1474,7 +1482,8 @@ g_908f:		.byte $21, $2e, $38, $32	; $908f: 21 2e 38 32	 Data
 			.byte $97, $97, $97, $97	; $968b: 97 97 97 97	 Data
 			.byte $97, $97, $97, $97	; $968f: 97 97 97 97	 Data
 			.byte $97, $97	; $9693: 97 97		 Data
-g_9695:		.byte $97, $97, $97, $97	; $9695: 97 97 97 97	 Data
+PRG06_9695:
+			.byte $97, $97, $97, $97	; $9695: 97 97 97 97	 Data
 			.byte $98, $98, $98, $98	; $9699: 98 98 98 98	 Data
 			.byte $98, $98, $98, $98	; $969d: 98 98 98 98	 Data
 			.byte $98, $98, $98, $98	; $96a1: 98 98 98 98	 Data
@@ -1508,7 +1517,8 @@ g_9695:		.byte $97, $97, $97, $97	; $9695: 97 97 97 97	 Data
 			.byte $6e, $6f, $7e, $7f	; $9711: 6e 6f 7e 7f	 Data
 			.byte $8e, $8f, $9e, $9f	; $9715: 8e 8f 9e 9f	 Data
 			.byte $8c	; $9719: 8c			Data
-g_971a:		.byte $8d, $9c, $9d, $ac	; $971a: 8d 9c 9d ac	 Data
+PRG06_971a:
+			.byte $8d, $9c, $9d, $ac	; $971a: 8d 9c 9d ac	 Data
 			.byte $ad, $bc, $3b, $f8	; $971e: ad bc 3b f8	 Data
 			.byte $00, $66, $67, $76	; $9722: 00 66 67 76	 Data
 			.byte $77, $88, $89, $98	; $9726: 77 88 89 98	 Data
@@ -1538,7 +1548,8 @@ g_971a:		.byte $8d, $9c, $9d, $ac	; $971a: 8d 9c 9d ac	 Data
 			.byte $66, $67, $76, $77	; $9786: 66 67 76 77	 Data
 			.byte $88, $89, $98, $99	; $978a: 88 89 98 99	 Data
 			.byte $f6	; $978e: f6			Data
-g_978f:		.byte $00, $6e, $6f, $7e	; $978f: 00 6e 6f 7e	 Data
+PRG06_978f:
+			.byte $00, $6e, $6f, $7e	; $978f: 00 6e 6f 7e	 Data
 			.byte $7f, $8e, $8f, $4b	; $9793: 7f 8e 8f 4b	 Data
 			.byte $4c, $5b, $5c, $8c	; $9797: 4c 5b 5c 8c	 Data
 			.byte $8d, $9c, $9d, $ac	; $979b: 8d 9c 9d ac	 Data
@@ -1567,7 +1578,8 @@ g_978f:		.byte $00, $6e, $6f, $7e	; $978f: 00 6e 6f 7e	 Data
 			.byte $99, $88, $89, $98	; $97f7: 99 88 89 98	 Data
 			.byte $99, $88, $89, $98	; $97fb: 99 88 89 98	 Data
 			.byte $99	; $97ff: 99			Data
-g_9800:		.byte $88, $89, $98, $99	; $9800: 88 89 98 99	 Data
+PRG06_9800:
+			.byte $88, $89, $98, $99	; $9800: 88 89 98 99	 Data
 			.byte $fc, $00, $10, $11	; $9804: fc 00 10 11	 Data
 			.byte $54, $55, $8a, $8b	; $9808: 54 55 8a 8b	 Data
 			.byte $9a, $9b, $34, $35	; $980c: 9a 9b 34 35	 Data
@@ -1707,7 +1719,8 @@ g_9800:		.byte $88, $89, $98, $99	; $9800: 88 89 98 99	 Data
 			.byte $43, $52, $53, $52	; $9a24: 43 52 53 52	 Data
 			.byte $53, $26, $27, $fc	; $9a28: 53 26 27 fc	 Data
 			.byte $00	; $9a2c: 00			Data
-g_9a2d:		.byte $10, $11, $54, $55	; $9a2d: 10 11 54 55	 Data
+PRG06_9a2d:
+			.byte $10, $11, $54, $55	; $9a2d: 10 11 54 55	 Data
 			.byte $8c, $8d, $9c, $9d	; $9a31: 8c 8d 9c 9d	 Data
 			.byte $ac, $ad, $0a, $0b	; $9a35: ac ad 0a 0b	 Data
 			.byte $fc, $00, $10, $11	; $9a39: fc 00 10 11	 Data
@@ -1730,7 +1743,8 @@ g_9a2d:		.byte $10, $11, $54, $55	; $9a2d: 10 11 54 55	 Data
 			.byte $6f, $8e, $8f, $9e	; $9a7d: 6f 8e 8f 9e	 Data
 			.byte $9f, $8c, $8d, $9c	; $9a81: 9f 8c 8d 9c	 Data
 			.byte $9d	; $9a85: 9d			Data
-g_9a86:		.byte $ac, $ad, $bc, $3b	; $9a86: ac ad bc 3b	 Data
+PRG06_9a86:
+			.byte $ac, $ad, $bc, $3b	; $9a86: ac ad bc 3b	 Data
 			.byte $f8, $00, $20, $21	; $9a8a: f8 00 20 21	 Data
 			.byte $30, $31, $40, $41	; $9a8e: 30 31 40 41	 Data
 			.byte $50, $51, $8c, $8d	; $9a92: 50 51 8c 8d	 Data
@@ -1764,7 +1778,7 @@ g_9a86:		.byte $ac, $ad, $bc, $3b	; $9a86: ac ad bc 3b	 Data
 			.byte $30, $31, $40, $41	; $9b02: 30 31 40 41	 Data
 			.byte $50, $51, $30, $31	; $9b06: 50 51 30 31	 Data
 			.byte $40, $41, $24	; $9b0a: 40 41 24		Data
-g_9b0d:
+PRG06_9b0d:
 			.byte $25, $fa ; $9b0d
 			.byte $00 ; $9b0f
 			.byte $22 ; $9b10
@@ -1790,7 +1804,8 @@ g_9b0d:
 			.byte $33, $42 ; $9b35
 			.byte $43, $52 ; $9b37
 			.byte $53 ; $9b39
-g_9b3a:		.byte $32, $33, $42, $43	; $9b3a: 32 33 42 43	 Data
+PRG06_9b3a:
+			.byte $32, $33, $42, $43	; $9b3a: 32 33 42 43	 Data
 			.byte $52, $53, $26, $27	; $9b3e: 52 53 26 27	 Data
 			.byte $28, $29, $00, $39	; $9b42: 28 29 00 39	 Data
 			.byte $f8, $00, $10, $11	; $9b46: f8 00 10 11	 Data
@@ -1846,7 +1861,8 @@ g_9b3a:		.byte $32, $33, $42, $43	; $9b3a: 32 33 42 43	 Data
 			.byte $53, $32, $33, $42	; $9c0e: 53 32 33 42	 Data
 			.byte $43, $52, $53, $32	; $9c12: 43 52 53 32	 Data
 			.byte $33, $42, $43, $26	; $9c16: 33 42 43 26	 Data
-g_9c1a:		.byte $27, $fc, $00, $10	; $9c1a: 27 fc 00 10	 Data
+PRG06_9c1a:
+			.byte $27, $fc, $00, $10	; $9c1a: 27 fc 00 10	 Data
 			.byte $11, $54, $55, $8a	; $9c1e: 11 54 55 8a	 Data
 			.byte $8b, $9a, $9b, $66	; $9c22: 8b 9a 9b 66	 Data
 			.byte $67, $76, $77, $fa	; $9c26: 67 76 77 fa	 Data
@@ -1875,7 +1891,8 @@ g_9c1a:		.byte $27, $fc, $00, $10	; $9c1a: 27 fc 00 10	 Data
 			.byte $65, $74, $75, $8a	; $9c82: 65 74 75 8a	 Data
 			.byte $8b, $9a, $9b, $aa	; $9c86: 8b 9a 9b aa	 Data
 			.byte $ab, $3b	; $9c8a: ab 3b		 Data
-g_9c8c:		.byte $bb, $f8, $00, $58	; $9c8c: bb f8 00 58	 Data
+PRG06_9c8c:
+			.byte $bb, $f8, $00, $58	; $9c8c: bb f8 00 58	 Data
 			.byte $59, $98, $99, $88	; $9c90: 59 98 99 88	 Data
 			.byte $89, $98, $99, $8a	; $9c94: 89 98 99 8a	 Data
 			.byte $8b, $9a, $9b, $aa	; $9c98: 8b 9a 9b aa	 Data
@@ -1899,7 +1916,8 @@ g_9c8c:		.byte $bb, $f8, $00, $58	; $9c8c: bb f8 00 58	 Data
 			.byte $01, $01, $01, $01	; $9ce0: 01 01 01 01	 Data
 			.byte $01, $02, $04, $01	; $9ce4: 01 02 04 01	 Data
 			.byte $01	; $9ce8: 01			Data
-g_9ce9:		.byte $01, $01, $01, $01	; $9ce9: 01 01 01 01	 Data
+PRG06_9ce9:
+			.byte $01, $01, $01, $01	; $9ce9: 01 01 01 01	 Data
 			.byte $01, $05, $01, $01	; $9ced: 01 05 01 01	 Data
 			.byte $01, $01, $01, $06	; $9cf1: 01 01 01 06	 Data
 			.byte $01, $01, $06, $01	; $9cf5: 01 01 06 01	 Data
@@ -1909,7 +1927,8 @@ g_9ce9:		.byte $01, $01, $01, $01	; $9ce9: 01 01 01 01	 Data
 			.byte $01, $01, $01, $01	; $9d05: 01 01 01 01	 Data
 			.byte $12, $01, $01, $01	; $9d09: 12 01 01 01	 Data
 			.byte $06	; $9d0d: 06			Data
-g_9d0e:		.byte $01, $06, $01, $01	; $9d0e: 01 06 01 01	 Data
+PRG06_9d0e:
+			.byte $01, $06, $01, $01	; $9d0e: 01 06 01 01	 Data
 			.byte $01, $01, $06, $08	; $9d12: 01 01 06 08	 Data
 			.byte $01, $06, $01, $01	; $9d16: 01 06 01 01	 Data
 			.byte $01, $01, $02, $04	; $9d1a: 01 01 02 04	 Data
@@ -2008,7 +2027,8 @@ g_9d0e:		.byte $01, $06, $01, $01	; $9d0e: 01 06 01 01	 Data
 			.byte $5e, $69, $77, $9e	; $9e8e: 5e 69 77 9e	 Data
 			.byte $9e, $9e, $9e, $9f	; $9e92: 9e 9e 9e 9f	 Data
 			.byte $9f	; $9e96: 9f			Data
-g_9e97:		.byte $9f, $9f, $9f, $9f	; $9e97: 9f 9f 9f 9f	 Data
+PRG06_9e97:
+			.byte $9f, $9f, $9f, $9f	; $9e97: 9f 9f 9f 9f	 Data
 			.byte $9f, $9f, $9f, $9f	; $9e9b: 9f 9f 9f 9f	 Data
 			.byte $9f, $9f, $9f, $9f	; $9e9f: 9f 9f 9f 9f	 Data
 			.byte $a0, $a0, $a0, $a0	; $9ea3: a0 a0 a0 a0	 Data
@@ -2074,7 +2094,8 @@ g_9e97:		.byte $9f, $9f, $9f, $9f	; $9e97: 9f 9f 9f 9f	 Data
 			.byte $29, $2a, $33, $00	; $9f93: 29 2a 33 00	 Data
 			.byte $3d, $3e, $4c, $4d	; $9f97: 3d 3e 4c 4d	 Data
 			.byte $5b, $5c, $6a	; $9f9b: 5b 5c 6a		Data
-g_9f9e:		.byte $6b, $7b, $7c, $90	; $9f9e: 6b 7b 7c 90	 Data
+PRG06_9f9e:
+			.byte $6b, $7b, $7c, $90	; $9f9e: 6b 7b 7c 90	 Data
 			.byte $91, $05, $06, $fa	; $9fa2: 91 05 06 fa	 Data
 			.byte $00, $3f, $40, $4e	; $9fa6: 00 3f 40 4e	 Data
 			.byte $4f, $00, $5d, $6c	; $9faa: 4f 00 5d 6c	 Data
@@ -2099,7 +2120,8 @@ g_9f9e:		.byte $6b, $7b, $7c, $90	; $9f9e: 6b 7b 7c 90	 Data
 			.byte $1f, $26, $27, $30	; $9ff6: 1f 26 27 30	 Data
 			.byte $31, $3a, $3b, $49	; $9ffa: 31 3a 3b 49	 Data
 			.byte $4a	; $9ffe: 4a			Data
-g_9fff:		.byte $ff, $00, $00, $28	; $9fff: ff 00 00 28	 Data
+PRG06_9fff:
+			.byte $ff, $00, $00, $28	; $9fff: ff 00 00 28	 Data
 			.byte $29, $32, $33, $3c	; $a003: 29 32 33 3c	 Data
 			.byte $3d, $4b, $4c, $f5	; $a007: 3d 4b 4c f5	 Data
 			.byte $00, $0d, $00, $00	; $a00b: 00 0d 00 00	 Data
@@ -3154,17 +3176,20 @@ g_9fff:		.byte $ff, $00, $00, $28	; $9fff: ff 00 00 28	 Data
 			.byte $55, $55 ; $aa8c
 			.byte $55 ; $aa8e
 
-g_aa8f:		jsr g_aaea			; $aa8f: 20 ea aa
+PRG06_aa8f:
+			jsr PRG06_aaea			; $aa8f: 20 ea aa
 			ldy $0481			; $aa92: ac 81 04
-			LoadAddressFromTable g_abc7, g_abd2, y
-g_aa9f:		ldy #$00				; $aa9f: a0 00
+			LoadAddressFromTable PRG06_abc7, PRG06_abd2, y
+PRG06_aa9f:
+			ldy #$00				; $aa9f: a0 00
 			lda (LoadedAddress),y		; $aaa1: b1 a5
 			sta $a2			; $aaa3: 85 a2
-			bne g_aaa8			; $aaa5: d0 01
+			bne PRG06_aaa8			; $aaa5: d0 01
 			rts				; $aaa7: 60
 
 ;-------------------------------------------------------------------------------
-g_aaa8:		iny				; $aaa8: c8
+PRG06_aaa8:
+			iny				; $aaa8: c8
 			lda (LoadedAddress),y		; $aaa9: b1 a5
 			sta $a3			; $aaab: 85 a3
 			iny				; $aaad: c8
@@ -3191,8 +3216,10 @@ g_aaa8:		iny				; $aaa8: c8
 			adc #$00				; $aad0: 69 00
 			sta LoadAddress_High			; $aad2: 85 a6
 			ldy #$00				; $aad4: a0 00
-g_aad6:		lda ($a3),y		; $aad6: b1 a3
-g_aad8:		clc				; $aad8: 18
+PRG06_aad6:
+			lda ($a3),y		; $aad6: b1 a3
+PRG06_aad8:
+			clc				; $aad8: 18
 			adc $a0			; $aad9: 65 a0
 			sta $0200,x		; $aadb: 9d 00 02
 			iny				; $aade: c8
@@ -3201,124 +3228,139 @@ g_aad8:		clc				; $aad8: 18
 			inx				; $aae1: e8
 			inx				; $aae2: e8
 			dec $a2			; $aae3: c6 a2
-			bne g_aad6			; $aae5: d0 ef
-			jmp g_aa9f			; $aae7: 4c 9f aa
+			bne PRG06_aad6			; $aae5: d0 ef
+			jmp PRG06_aa9f			; $aae7: 4c 9f aa
 
 ;-------------------------------------------------------------------------------
-g_aaea:		cpy #$ff				; $aaea: c0 ff
+PRG06_aaea:
+			cpy #$ff				; $aaea: c0 ff
 			php				; $aaec: 08
 			beq +			; $aaed: f0 03
 			sty $0481			; $aaef: 8c 81 04
 +
 			ldy $0481			; $aaf2: ac 81 04
-g_aaf5:		lda g_ab03-1,y			; $aaf5: b9 02 ab
+PRG06_aaf5:
+			lda PRG06_ab03-1,y			; $aaf5: b9 02 ab
 			sta $a3			; $aaf8: 85 a3
-			lda g_ab0d,y			; $aafa: b9 0d ab
+			lda PRG06_ab0d,y			; $aafa: b9 0d ab
 			sta $a4			; $aafd: 85 a4
 			plp				; $aaff: 28
 			jmp ($00a3)
 
 
-g_ab03:
+PRG06_ab03:
 			.byte $27, $2a ; $ab03
 			.byte $4d, $86, $9a ; $ab05
 			.byte $a5, $a5 ; $ab08
 			.byte $a5, $a5 ; $ab0a
 			.byte $a5 ; $ab0c
-g_ab0d:		.byte $27, $ab, $ab, $ab	; $ab0d: 27 ab ab ab	 Data
+PRG06_ab0d:
+			.byte $27, $ab, $ab, $ab	; $ab0d: 27 ab ab ab	 Data
 			.byte $ab, $ab, $ab, $ab	; $ab11: ab ab ab ab	 Data
 			.byte $ab, $ab, $ab, $ab	; $ab15: ab ab ab ab	 Data
 
 ;-------------------------------------------------------------------------------
-g_ab19:		ldx #$03				; $ab19: a2 03
+PRG06_ab19:
+			ldx #$03				; $ab19: a2 03
 			lda #$00				; $ab1b: a9 00
-g_ab1d:		sta $0482,x		; $ab1d: 9d 82 04
+PRG06_ab1d:
+			sta $0482,x		; $ab1d: 9d 82 04
 			sta $0486,x		; $ab20: 9d 86 04
 			dex				; $ab23: ca
-			bpl g_ab1d			; $ab24: 10 f7
+			bpl PRG06_ab1d			; $ab24: 10 f7
 			rts				; $ab26: 60
 
 ;-------------------------------------------------------------------------------
-			bne g_ab19			; $ab27: d0 f0
+			bne PRG06_ab19			; $ab27: d0 f0
 			rts				; $ab29: 60
 
 ;-------------------------------------------------------------------------------
-			beq g_ab2f			; $ab2a: f0 03
-			jmp g_ab19			; $ab2c: 4c 19 ab
+			beq PRG06_ab2f			; $ab2a: f0 03
+			jmp PRG06_ab19			; $ab2c: 4c 19 ab
 
 ;-------------------------------------------------------------------------------
-g_ab2f:		clc				; $ab2f: 18
+PRG06_ab2f:
+			clc				; $ab2f: 18
 			lda $0487			; $ab30: ad 87 04
 			adc #$06				; $ab33: 69 06
 			sta $0487			; $ab35: 8d 87 04
-			bcc g_ab3d			; $ab38: 90 03
+			bcc PRG06_ab3d			; $ab38: 90 03
 			inc $0483			; $ab3a: ee 83 04
-g_ab3d:		lda $0483			; $ab3d: ad 83 04
+PRG06_ab3d:
+			lda $0483			; $ab3d: ad 83 04
 			lsr				; $ab40: 4a
 			lsr				; $ab41: 4a
 			lsr				; $ab42: 4a
 			sta $0485			; $ab43: 8d 85 04
-			jsr L_c078			; $ab46: 20 78 c0
+			jsr Main_c078			; $ab46: 20 78 c0
 			sta $0484			; $ab49: 8d 84 04
 			rts				; $ab4c: 60
 
 ;-------------------------------------------------------------------------------
-			beq g_ab52			; $ab4d: f0 03
-			jmp g_ab19			; $ab4f: 4c 19 ab
+			beq PRG06_ab52			; $ab4d: f0 03
+			jmp PRG06_ab19			; $ab4f: 4c 19 ab
 
 ;-------------------------------------------------------------------------------
-g_ab52:		sec				; $ab52: 38
+PRG06_ab52:
+			sec				; $ab52: 38
 			lda $0487			; $ab53: ad 87 04
 			sbc #$08				; $ab56: e9 08
 			sta $0487			; $ab58: 8d 87 04
-			bcs g_ab60			; $ab5b: b0 03
+			bcs PRG06_ab60			; $ab5b: b0 03
 			dec $0483			; $ab5d: ce 83 04
-g_ab60:		sec				; $ab60: 38
+PRG06_ab60:
+			sec				; $ab60: 38
 			lda $0488			; $ab61: ad 88 04
 			sbc #$20				; $ab64: e9 20
 			sta $0488			; $ab66: 8d 88 04
-			bcs g_ab6e			; $ab69: b0 03
+			bcs PRG06_ab6e			; $ab69: b0 03
 			dec $0484			; $ab6b: ce 84 04
-g_ab6e:		inc $0489			; $ab6e: ee 89 04
+PRG06_ab6e:
+			inc $0489			; $ab6e: ee 89 04
 			lda $0489			; $ab71: ad 89 04
 			tay				; $ab74: a8
 			and #$3f				; $ab75: 29 3f
-			bne g_ab85			; $ab77: d0 0c
+			bne PRG06_ab85			; $ab77: d0 0c
 			tya				; $ab79: 98
-			bmi g_ab82			; $ab7a: 30 06
+			bmi PRG06_ab82			; $ab7a: 30 06
 			inc $0485			; $ab7c: ee 85 04
-			jmp g_ab85			; $ab7f: 4c 85 ab
+			jmp PRG06_ab85			; $ab7f: 4c 85 ab
 
 ;-------------------------------------------------------------------------------
-g_ab82:		dec $0485			; $ab82: ce 85 04
-g_ab85:		rts				; $ab85: 60
+PRG06_ab82:
+			dec $0485			; $ab82: ce 85 04
+PRG06_ab85:
+			rts				; $ab85: 60
 
 ;-------------------------------------------------------------------------------
-			beq g_ab8b			; $ab86: f0 03
-			jmp g_ab19			; $ab88: 4c 19 ab
+			beq PRG06_ab8b			; $ab86: f0 03
+			jmp PRG06_ab19			; $ab88: 4c 19 ab
 
 ;-------------------------------------------------------------------------------
-g_ab8b:		clc				; $ab8b: 18
+PRG06_ab8b:
+			clc				; $ab8b: 18
 			lda $0487			; $ab8c: ad 87 04
 			adc #$40				; $ab8f: 69 40
 			sta $0487			; $ab91: 8d 87 04
-			bcc g_ab99			; $ab94: 90 03
+			bcc PRG06_ab99			; $ab94: 90 03
 			inc $0483			; $ab96: ee 83 04
-g_ab99:		rts				; $ab99: 60
+PRG06_ab99:
+			rts				; $ab99: 60
 
 ;-------------------------------------------------------------------------------
-			beq g_aba5			; $ab9a: f0 09
-			jsr g_ab19			; $ab9c: 20 19 ab
+			beq PRG06_aba5			; $ab9a: f0 09
+			jsr PRG06_ab19			; $ab9c: 20 19 ab
 			lda #$ff				; $ab9f: a9 ff
 			sta $0483			; $aba1: 8d 83 04
 			rts				; $aba4: 60
 
 ;-------------------------------------------------------------------------------
-g_aba5:		sec				; $aba5: 38
+PRG06_aba5:
+			sec				; $aba5: 38
 			lda $0487			; $aba6: ad 87 04
 			sbc #$50				; $aba9: e9 50
 			sta $0487			; $abab: 8d 87 04
-			bcs g_abc7			; $abae: b0 17
+			bcs PRG06_abc7			; $abae: b0 17
 			dec $0483			; $abb0: ce 83 04
 			lda $0483			; $abb3: ad 83 04
 			eor #$ff				; $abb6: 49 ff
@@ -3328,10 +3370,12 @@ g_aba5:		sec				; $aba5: 38
 			clc				; $abbb: 18
 			adc #$05				; $abbc: 69 05
 			cmp #$0b				; $abbe: c9 0b
-			bcc g_abc4			; $abc0: 90 02
+			bcc PRG06_abc4			; $abc0: 90 02
 			lda #$0a				; $abc2: a9 0a
-g_abc4:		sta $0481			; $abc4: 8d 81 04
-g_abc7:		rts				; $abc7: 60
+PRG06_abc4:
+			sta $0481			; $abc4: 8d 81 04
+PRG06_abc7:
+			rts				; $abc7: 60
 
 ;-------------------------------------------------------------------------------
 			.byte $0e, $27, $52 ; $abc8
@@ -3339,7 +3383,8 @@ g_abc7:		rts				; $abc7: 60
 			.byte $df, $f8, $11 ; $abcd
 			.byte $2a ; $abd0
 			.byte $43 ; $abd1
-g_abd2:		.byte $5c, $ac, $ac, $ac	; $abd2: 5c ac ac ac	 Data
+PRG06_abd2:
+			.byte $5c, $ac, $ac, $ac	; $abd2: 5c ac ac ac	 Data
 			.byte $ac, $ac, $ac, $ac	; $abd6: ac ac ac ac	 Data
 			.byte $ad, $ad, $ad, $ad	; $abda: ad ad ad ad	 Data
 			.byte $00, $00, $00, $00	; $abde: 00 00 00 00	 Data
@@ -3546,19 +3591,22 @@ g_abd2:		.byte $5c, $ac, $ac, $ac	; $abd2: 5c ac ac ac	 Data
 			.byte $85, $21, $0a, $0a	; $af01: 85 21 0a 0a	 Data
 			.byte $aa, $bd, $21, $af	; $af05: aa bd 21 af	 Data
 			.byte $29, $bf, $a8	; $af09: 29 bf a8		Data
-g_af0c:		inx				; $af0c: e8
-			lda g_af21,x			; $af0d: bd 21 af
+PRG06_af0c:
+			inx				; $af0c: e8
+			lda PRG06_af21,x			; $af0d: bd 21 af
 			and #$40				; $af10: 29 40
-			bne g_af20			; $af12: d0 0c
-			lda g_af21,x			; $af14: bd 21 af
+			bne PRG06_af20			; $af12: d0 0c
+			lda PRG06_af21,x			; $af14: bd 21 af
 			and #$3f				; $af17: 29 3f
 			sta $0080,y		; $af19: 99 80 00
 			iny				; $af1c: c8
-			jmp g_af0c			; $af1d: 4c 0c af
+			jmp PRG06_af0c			; $af1d: 4c 0c af
 
 ;-------------------------------------------------------------------------------
-g_af20:		.byte $e6	; $af20: e6		Suspected data
-g_af21:		.byte $21, $a5, $21, $60	; $af21: 21 a5 21 60	 Data
+PRG06_af20:
+			.byte $e6	; $af20: e6		Suspected data
+PRG06_af21:
+			.byte $21, $a5, $21, $60	; $af21: 21 a5 21 60	 Data
 			.byte $59, $07, $0f, $0f	; $af25: 59 07 0f 0f	 Data
 			.byte $59, $17, $07, $0f	; $af29: 59 17 07 0f	 Data
 			.byte $59, $27, $17, $06	; $af2d: 59 27 17 06	 Data
@@ -3938,7 +3986,7 @@ g_af21:		.byte $21, $a5, $21, $60	; $af21: 21 a5 21 60	 Data
 			.byte $00, $97, $00, $97	; $b4fc: 00 97 00 97	 Data
 			.byte $00, $97, $00, $00	; $b500: 00 97 00 00	 Data
 			.byte $00, $00
-g_b506:
+PRG06_b506:
 			.byte $ff, $00
 			.byte $ff, $00, $ff, $00	; $b508: ff 00 ff 00	 Data
 			.byte $ff, $00, $90, $00	; $b50c: ff 00 90 00	 Data
@@ -4492,38 +4540,39 @@ g_b506:
 ;	Credits scene
 ;-------------------------------------------------------------------------------
 
-g_GM_Credits:
+PRG06_GM_Credits:
 			lda #MusID_Credits				; $b96f: a9 17
 			jsr Goto_PlaySound			; $b971: 20 c6 c0
 			lda #$00				; $b974: a9 00
 			sta $04c0			; $b976: 8d c0 04
 
 -			jsr Goto_WaitFrame			; $b979: 20 ba c0
-			jsr g_ba7a			; $b97c: 20 7a ba
+			jsr PRG06_ba7a			; $b97c: 20 7a ba
 			lda $04c0			; $b97f: ad c0 04
 			bpl -			; $b982: 10 f5
 			lda #$00				; $b984: a9 00
 			sta $04c0			; $b986: 8d c0 04
 
 -			jsr Goto_WaitFrame			; $b989: 20 ba c0
-			jsr g_bb43			; $b98c: 20 43 bb
+			jsr PRG06_bb43			; $b98c: 20 43 bb
 			lda $04c0			; $b98f: ad c0 04
 			bpl -				; $b992: 10 f5
 			lda #$00				; $b994: a9 00
 			sta $04c0			; $b996: 8d c0 04
 
 -			jsr Goto_WaitFrame			; $b999: 20 ba c0
-			jsr g_bcaa			; $b99c: 20 aa bc
+			jsr PRG06_bcaa			; $b99c: 20 aa bc
 			lda $04c0			; $b99f: ad c0 04
 			bpl -			; $b9a2: 10 f5
 			
-			jsr g_b9aa			; $b9a4: 20 aa b9
+			jsr PRG06_b9aa			; $b9a4: 20 aa b9
 
 -			jmp -		; Infinite loop
 
 ;-------------------------------------------------------------------------------
 	; TODO: comment
-g_b9aa:		ldx #(5*60)/6		; Wait 5 seconds
+PRG06_b9aa:
+			ldx #(5*60)/6		; Wait 5 seconds
 			jsr Goto_GameWait
 
 			lda #$20				; $b9af: a9 20
@@ -4550,7 +4599,7 @@ g_b9aa:		ldx #(5*60)/6		; Wait 5 seconds
 			ldx #60/6		; Wait 1 second
 			jsr Goto_GameWait
 
-			LoadAddress g_Credits_Toho
+			LoadAddress PRG06_Credits_Toho
 			lda #$23				; $b9df: a9 23
 			sta $a3			; $b9e1: 85 a3
 			lda #$21				; $b9e3: a9 21
@@ -4559,9 +4608,9 @@ g_b9aa:		ldx #(5*60)/6		; Wait 5 seconds
 			sta $a1			; $b9e9: 85 a1
 			lda #$00				; $b9eb: a9 00
 			sta $a2			; $b9ed: 85 a2
-			jsr L_c027			; $b9ef: 20 27 c0
+			jsr Main_c027			; $b9ef: 20 27 c0
 
-			LoadAddress g_Credits_Presents
+			LoadAddress PRG06_Credits_Presents
 			lda #$6c				; $b9fa: a9 6c
 			sta $a3			; $b9fc: 85 a3
 			lda #$21				; $b9fe: a9 21
@@ -4570,7 +4619,7 @@ g_b9aa:		ldx #(5*60)/6		; Wait 5 seconds
 			sta $a1			; $ba04: 85 a1
 			lda #$00				; $ba06: a9 00
 			sta $a2			; $ba08: 85 a2
-			jsr L_c027			; $ba0a: 20 27 c0
+			jsr Main_c027			; $ba0a: 20 27 c0
 
 			lda #$00				; $ba0d: a9 00
 			sta @w $0089
@@ -4596,7 +4645,7 @@ g_b9aa:		ldx #(5*60)/6		; Wait 5 seconds
 			ldx #$0a				; $ba30: a2 0a
 			jsr Goto_GameWait			; $ba32: 20 c3 c0
 
-			LoadAddress g_Credits_TheEnd
+			LoadAddress PRG06_Credits_TheEnd
 			lda #$d5				; $ba3d: a9 d5
 			sta $a3			; $ba3f: 85 a3
 			lda #$22				; $ba41: a9 22
@@ -4605,24 +4654,26 @@ g_b9aa:		ldx #(5*60)/6		; Wait 5 seconds
 			sta $a1			; $ba47: 85 a1
 			lda #$00				; $ba49: a9 00
 			sta $a2			; $ba4b: 85 a2
-			jsr L_c027			; $ba4d: 20 27 c0
+			jsr Main_c027			; $ba4d: 20 27 c0
 
 			rts				; $ba50: 60
 
 ;-------------------------------------------------------------------------------
 			.encode Enc_Default
-g_Credits_Toho:		.text "TOHO CINEFILE-SOFT LIBRARY"
-g_Credits_Presents:	.text "PRESENTS"
-g_Credits_TheEnd:	.text "THE END"
+PRG06_Credits_Toho:		.text "TOHO CINEFILE-SOFT LIBRARY"
+PRG06_Credits_Presents:	.text "PRESENTS"
+PRG06_Credits_TheEnd:	.text "THE END"
 			.endencode
 ;-------------------------------------------------------------------------------
 
-g_ba7a:		ldy $04c0			; $ba7a: ac c0 04
-			bpl g_ba80			; $ba7d: 10 01
+PRG06_ba7a:
+			ldy $04c0			; $ba7a: ac c0 04
+			bpl PRG06_ba80			; $ba7d: 10 01
 			rts				; $ba7f: 60
 
 ;-------------------------------------------------------------------------------
-g_ba80:		LoadAddressFromTable g_ba8d, g_ba92, y
+PRG06_ba80:
+			LoadAddressFromTable PRG06_ba8d, PRG06_ba92, y
 			jmp (LoadedAddress)		; $ba8a: 6c a5 00
 
 ;-------------------------------------------------------------------------------
@@ -4633,8 +4684,8 @@ g_ba80:		LoadAddressFromTable g_ba8d, g_ba92, y
 			TableInsert $bb15
 			TableInsert $bb37
 ;	TODO: table
-g_ba8d:		.byte <CurrentTable
-g_ba92:		.byte >CurrentTable
+PRG06_ba8d:	.byte <CurrentTable
+PRG06_ba92:	.byte >CurrentTable
 
 ;	TODO: convert to code
 			.byte $a9, $08, $8d	; $ba97: a9 08 8d	 Data
@@ -4670,8 +4721,9 @@ g_ba92:		.byte >CurrentTable
 			.byte $e6, $d9, $a5, $d9	; $bb03: e6 d9 a5 d9	 Data
 			.byte $c9, $20, $b0, $01	; $bb07: c9 20 b0 01	 Data
 			.byte $60	; $bb0b: 60			Data
-g_bb0c:		ldy #$05				; $bb0c: a0 05
-			jsr g_aa8f			; $bb0e: 20 8f aa
+PRG06_bb0c:
+			ldy #$05				; $bb0c: a0 05
+			jsr PRG06_aa8f			; $bb0e: 20 8f aa
 			inc $04c0			; $bb11: ee c0 04
 			rts
 			.byte $a0, $ff, $20	; $bb14: 60 a0 ff 20	 Data
@@ -4679,41 +4731,47 @@ g_bb0c:		ldy #$05				; $bb0c: a0 05
 			.byte $04, $ad, $c1, $04	; $bb1c: 04 ad c1 04	 Data
 			.byte $29, $01, $f0, $01	; $bb20: 29 01 f0 01	 Data
 			.byte $60	; $bb24: 60			Data
-g_bb25:		.byte $a5, $d9, $c9, $ff	; $bb25: a5 d9 c9 ff	 Data
+PRG06_bb25:
+			.byte $a5, $d9, $c9, $ff	; $bb25: a5 d9 c9 ff	 Data
 			.byte $f0, $03, $e6, $d9	; $bb29: f0 03 e6 d9	 Data
 			.byte $60	; $bb2d: 60			Data
-g_bb2e:		lda #$fa				; $bb2e: a9 fa
+PRG06_bb2e:
+			lda #$fa				; $bb2e: a9 fa
 			sta $04c1			; $bb30: 8d c1 04
 			inc $04c0			; $bb33: ee c0 04
 			rts				; $bb36: 60
 
 ;-------------------------------------------------------------------------------
 			dec $04c1			; $bb37: ce c1 04
-			beq g_bb3d			; $bb3a: f0 01
+			beq PRG06_bb3d			; $bb3a: f0 01
 			rts				; $bb3c: 60
 
 ;-------------------------------------------------------------------------------
-g_bb3d:		lda #$ff				; $bb3d: a9 ff
+PRG06_bb3d:
+			lda #$ff				; $bb3d: a9 ff
 			sta $04c0			; $bb3f: 8d c0 04
 			rts				; $bb42: 60
 
 ;-------------------------------------------------------------------------------
-g_bb43:		ldy $04c0			; $bb43: ac c0 04
-			bpl g_bb49			; $bb46: 10 01
+PRG06_bb43:
+			ldy $04c0			; $bb43: ac c0 04
+			bpl PRG06_bb49			; $bb46: 10 01
 			rts				; $bb48: 60
 
 ;-------------------------------------------------------------------------------
-g_bb49:		LoadAddressFromTable g_bb56, g_bb58, y
+PRG06_bb49:
+			LoadAddressFromTable PRG06_bb56, PRG06_bb58, y
 			jmp (LoadedAddress)		; $bb53: 6c a5 00
 
 ;-------------------------------------------------------------------------------
 			TableStart
-			TableInsert g_bb5a
-			TableInsert g_bbb0
-g_bb56:		.byte <CurrentTable
-g_bb58:		.byte >CurrentTable
+			TableInsert PRG06_bb5a
+			TableInsert PRG06_bbb0
+PRG06_bb56:	.byte <CurrentTable
+PRG06_bb58:	.byte >CurrentTable
 ;	TODO: code
-g_bb5a:		.byte $a9, $00	; $bb5a: a9 00	 Data
+PRG06_bb5a:
+			.byte $a9, $00	; $bb5a: a9 00	 Data
 			.byte $85, $34, $8d, $c4	; $bb5c: 85 34 8d c4	 Data
 			.byte $04, $a9, $e2, $8d	; $bb60: 04 a9 e2 8d	 Data
 			.byte $c2, $04, $a9, $b0	; $bb64: c2 04 a9 b0	 Data
@@ -4728,39 +4786,42 @@ g_bb5a:		.byte $a9, $00	; $bb5a: a9 00	 Data
 			.byte $e9, $a0, $1f, $a9	; $bb88: e9 a0 1f a9	 Data
 			.byte $0f	; $bb8c: 0f			Data
 
-g_bb8d:		sta $0100,y		; $bb8d: 99 00 01
+PRG06_bb8d:
+			sta $0100,y		; $bb8d: 99 00 01
 			dey				; $bb90: 88
-			bpl g_bb8d			; $bb91: 10 fa
+			bpl PRG06_bb8d			; $bb91: 10 fa
 			lda #$30				; $bb93: a9 30
 			sta $0101			; $bb95: 8d 01 01
 			sta $0105			; $bb98: 8d 05 01
 			sta $0109			; $bb9b: 8d 09 01
 			sta $010d			; $bb9e: 8d 0d 01
 			jsr Goto_ClearScreen			; $bba1: 20 7e c0
-			jsr L_c075			; $bba4: 20 75 c0
+			jsr Main_c075			; $bba4: 20 75 c0
 			inc $04c0			; $bba7: ee c0 04
 			jsr Goto_ClearScreen			; $bbaa: 20 7e c0
-			jmp L_c0b1			; $bbad: 4c b1 c0
+			jmp Main_c0b1			; $bbad: 4c b1 c0
 
 ;-------------------------------------------------------------------------------
-g_bbb0:		lda #$01				; $bbb0: a9 01
-			jsr g_bbd4			; $bbb2: 20 d4 bb
+PRG06_bbb0:
+			lda #$01				; $bbb0: a9 01
+			jsr PRG06_bbd4			; $bbb2: 20 d4 bb
 			lda #$02				; $bbb5: a9 02
-			jsr g_bbd4			; $bbb7: 20 d4 bb
+			jsr PRG06_bbd4			; $bbb7: 20 d4 bb
 			lda #$00				; $bbba: a9 00
-			jsr g_bbd4			; $bbbc: 20 d4 bb
+			jsr PRG06_bbd4			; $bbbc: 20 d4 bb
 			lda $04c0			; $bbbf: ad c0 04
-			bpl g_bbb0			; $bbc2: 10 ec
+			bpl PRG06_bbb0			; $bbc2: 10 ec
 			jsr Goto_FadeInOut			; $bbc4: 20 ae c0
 			lda #$00				; $bbc7: a9 00
 			sta $d9			; $bbc9: 85 d9
 			sta $da			; $bbcb: 85 da
 			sta $db			; $bbcd: 85 db
 			sta $dc			; $bbcf: 85 dc
-			jmp L_c072			; $bbd1: 4c 72 c0
+			jmp Main_c072			; $bbd1: 4c 72 c0
 
 ;-------------------------------------------------------------------------------
-g_bbd4:		sta $a1			; $bbd4: 85 a1
+PRG06_bbd4:
+			sta $a1			; $bbd4: 85 a1
 			lda $04c4			; $bbd6: ad c4 04
 			sta $a3			; $bbd9: 85 a3
 			lda #$00				; $bbdb: a9 00
@@ -4774,12 +4835,14 @@ g_bbd4:		sta $a1			; $bbd4: 85 a1
 
 			lda $dc			; $bbe8: a5 dc
 			and #$01				; $bbea: 29 01
-			beq g_bbf2			; $bbec: f0 04
+			beq PRG06_bbf2			; $bbec: f0 04
 			lda #$20				; $bbee: a9 20
-			bne g_bbf5			; $bbf0: d0 03
-g_bbf2:		clc				; $bbf2: 18
+			bne PRG06_bbf5			; $bbf0: d0 03
+PRG06_bbf2:
+			clc				; $bbf2: 18
 			lda #$24				; $bbf3: a9 24
-g_bbf5:		adc $a4			; $bbf5: 65 a4
+PRG06_bbf5:
+			adc $a4			; $bbf5: 65 a4
 			sta $a4			; $bbf7: 85 a4
 			inc $04c4			; $bbf9: ee c4 04
 			lda $04c4			; $bbfc: ad c4 04
@@ -4790,12 +4853,12 @@ g_bbf5:		adc $a4			; $bbf5: 65 a4
 
 +			ldx $a4			; $bc08: a6 a4
 			ldy $a3			; $bc0a: a4 a3
-			jsr L_c00f			; $bc0c: 20 0f c0
+			jsr Main_c00f			; $bc0c: 20 0f c0
 			LoadAddressTransfer $04c2
 			ldy #$00				; $bc19: a0 00
 			lda #$20				; $bc1b: a9 20
 			ldy $cb			; $bc1d: a4 cb
-			jsr L_c0e4			; $bc1f: 20 e4 c0
+			jsr Main_c0e4			; $bc1f: 20 e4 c0
 			tya				; $bc22: 98
 			tax				; $bc23: aa
 			lda #$00				; $bc24: a9 00
@@ -4808,9 +4871,9 @@ g_bbf5:		adc $a4			; $bbf5: 65 a4
 			bne -			; $bc2f: d0 f9
 
 -		lda $a1			; $bc31: a5 a1
-			beq g_bc53			; $bc33: f0 1e
+			beq PRG06_bc53			; $bc33: f0 1e
 			lda (LoadedAddress),y		; $bc35: b1 a5
-			beq g_bc53			; $bc37: f0 1a
+			beq PRG06_bc53			; $bc37: f0 1a
 			sta $a2			; $bc39: 85 a2
 			lda $a1			; $bc3b: a5 a1
 			cmp #$01				; $bc3d: c9 01
@@ -4827,18 +4890,19 @@ g_bbf5:		adc $a4			; $bbf5: 65 a4
 			iny				; $bc50: c8
 			bne -			; $bc51: d0 de
 
-g_bc53:		cpy #$1d				; $bc53: c0 1d
+PRG06_bc53:
+			cpy #$1d				; $bc53: c0 1d
 			bcs +			; $bc55: b0 07
 			sta $0700,x		; $bc57: 9d 00 07
 			inx				; $bc5a: e8
 			iny				; $bc5b: c8
-			bne g_bc53			; $bc5c: d0 f5
+			bne PRG06_bc53			; $bc5c: d0 f5
 
 +			lda #$20				; $bc5e: a9 20
-			jsr L_c0ea			; $bc60: 20 ea c0
+			jsr Main_c0ea			; $bc60: 20 ea c0
 			lda $a1			; $bc63: a5 a1
 			cmp #$02				; $bc65: c9 02
-			bne g_bc8a			; $bc67: d0 21
+			bne PRG06_bc8a			; $bc67: d0 21
 			inc $a0			; $bc69: e6 a0
 			clc				; $bc6b: 18
 			lda LoadAddress_Low			; $bc6c: a5 a5
@@ -4851,13 +4915,14 @@ g_bc53:		cpy #$1d				; $bc53: c0 1d
 			sta $04c3			; $bc7b: 8d c3 04
 			ldy #$00				; $bc7e: a0 00
 			lda (LoadedAddress),y		; $bc80: b1 a5
-			bne g_bc8a			; $bc82: d0 06
+			bne PRG06_bc8a			; $bc82: d0 06
 			lda #$ff				; $bc84: a9 ff
 			sta $04c0			; $bc86: 8d c0 04
 			rts				; $bc89: 60
 
 ;-------------------------------------------------------------------------------
-g_bc8a:		ldx #$08				; $bc8a: a2 08
+PRG06_bc8a:
+			ldx #$08				; $bc8a: a2 08
 -			ldy #$06				; $bc8c: a0 06
 -			jsr Goto_WaitFrame			; $bc8e: 20 ba c0
 			dey				; $bc91: 88
@@ -4877,54 +4942,60 @@ g_bc8a:		ldx #$08				; $bc8a: a2 08
 			rts				; $bca9: 60
 
 ;-------------------------------------------------------------------------------
-g_bcaa:		ldy $04c0			; $bcaa: ac c0 04
-			bpl g_bcb0			; $bcad: 10 01
+PRG06_bcaa:
+			ldy $04c0			; $bcaa: ac c0 04
+			bpl PRG06_bcb0			; $bcad: 10 01
 			rts				; $bcaf: 60
 
 ;-------------------------------------------------------------------------------
-g_bcb0:		LoadAddressFromTable g_bcbd, g_bcc3, y
+PRG06_bcb0:
+			LoadAddressFromTable PRG06_bcbd, PRG06_bcc3, y
 			jmp (LoadedAddress)		; $bcba: 6c a5 00
 
 ;-------------------------------------------------------------------------------
 ;	TODO: table
-g_bcbd:		.byte $c9, $27, $4d, $c7	; $bcbd: c9 27 4d c7	 Data
+PRG06_bcbd:
+			.byte $c9, $27, $4d, $c7	; $bcbd: c9 27 4d c7	 Data
 			.byte $fb, $7b	; $bcc1: fb 7b		 Data
-g_bcc3:		.byte $bc, $bd, $bd, $bd	; $bcc3: bc bd bd bd	 Data
+PRG06_bcc3:
+			.byte $bc, $bd, $bd, $bd	; $bcc3: bc bd bd bd	 Data
 			.byte $bd, $be
 ;	TODO: code
 			.byte $58, $a9	; $bcc9: 58 a9	 Data
 			.byte $00, $85, $34, $8d	; $bccb: 00 85 34 8d	 Data
 			.byte $c2, $04, $a2, $ff	; $bccf: c2 04 a2 ff	 Data
-g_bcd3:		sta $0400,x		; $bcd3: 9d 00 04
+PRG06_bcd3:
+			sta $0400,x		; $bcd3: 9d 00 04
 			sta $0500,x		; $bcd6: 9d 00 05
 			dex				; $bcd9: ca
-			bpl g_bcd3			; $bcda: 10 f7
-			jsr L_c084			; $bcdc: 20 84 c0
+			bpl PRG06_bcd3			; $bcda: 10 f7
+			jsr Main_c084			; $bcdc: 20 84 c0
 			lda #$08				; $bcdf: a9 08
 			sta $0120			; $bce1: 8d 20 01
 			jsr Goto_FadeInOut			; $bce4: 20 ae c0
-			jsr L_c03c			; $bce7: 20 3c c0
+			jsr Main_c03c			; $bce7: 20 3c c0
 			lda #$02				; $bcea: a9 02
 			sta $012b			; $bcec: 8d 2b 01
-			jsr L_c02d			; $bcef: 20 2d c0
+			jsr Main_c02d			; $bcef: 20 2d c0
 			lda #$1e				; $bcf2: a9 1e
 			sta $c5			; $bcf4: 85 c5
 			lda #$19				; $bcf6: a9 19
 			sta WriteToCHR2_RAM			; $bcf8: 85 e9
 			sta WriteToCHR1_RAM			; $bcfa: 85 e8
-			LoadAddress g_b506
+			LoadAddress PRG06_b506
 			ldx #$20				; $bd04: a2 20
 			ldy #$00				; $bd06: a0 00
-			jsr L_c0c0			; $bd08: 20 c0 c0
+			jsr Main_c0c0			; $bd08: 20 c0 c0
 			lda #$20				; $bd0b: a9 20
 			jsr Goto_LoadPalette			; $bd0d: 20 d2 c0
 			lda #$30				; $bd10: a9 30
 			sta $0109			; $bd12: 8d 09 01
 			jsr Goto_WaitFrame			; $bd15: 20 ba c0
 			jsr Goto_WaitFrame			; $bd18: 20 ba c0
-			jsr L_c0b1			; $bd1b: 20 b1 c0
+			jsr Main_c0b1			; $bd1b: 20 b1 c0
 			; TODO: convert to code
-g_bd1e:		.byte $a9, $b4, $8d, $c1	; $bd1e: a9 b4 8d c1	 Data
+PRG06_bd1e:
+			.byte $a9, $b4, $8d, $c1	; $bd1e: a9 b4 8d c1	 Data
 			.byte $04, $ee, $c0, $04	; $bd22: 04 ee c0 04	 Data
 			.byte $60, $ce, $c1, $04	; $bd26: 60 ce c1 04	 Data
 			.byte $f0, $01, $60, $20	; $bd2a: f0 01 60 20	 Data
@@ -4964,7 +5035,8 @@ g_bd1e:		.byte $a9, $b4, $8d, $c1	; $bd1e: a9 b4 8d c1	 Data
 			.byte $0b, $05, $07, $04	; $bdb2: 0b 05 07 04	 Data
 			.byte $02, $23, $ab, $16	; $bdb6: 02 23 ab 16	 Data
 			.byte $70, $d9, $7f	; $bdba: 70 d9 7f		Data
-g_bdbd:		.byte $fa, $6b, $b5, $b5	; $bdbd: fa 6b b5 b5	 Data
+PRG06_bdbd:
+			.byte $fa, $6b, $b5, $b5	; $bdbd: fa 6b b5 b5	 Data
 			.byte $b6, $b6, $b6, $b7	; $bdc1: b6 b6 b6 b7	 Data
 			.byte $b7, $b8, $20, $87	; $bdc5: b7 b8 20 87	 Data
 			.byte $c0, $20, $87, $c0	; $bdc9: c0 20 87 c0	 Data
@@ -5021,41 +5093,45 @@ g_bdbd:		.byte $fa, $6b, $b5, $b5	; $bdbd: fa 6b b5 b5	 Data
 			.byte $c0, $04, $60	; $be95: c0 04 60		Data
 
 ;-------------------------------------------------------------------------------
-g_be98:		lda $04c0			; $be98: ad c0 04
+PRG06_be98:
+			lda $04c0			; $be98: ad c0 04
 			cmp #$ff				; $be9b: c9 ff
-			bne g_bea0			; $be9d: d0 01
+			bne PRG06_bea0			; $be9d: d0 01
 			rts				; $be9f: 60
 
 ;-------------------------------------------------------------------------------
-g_bea0:		tay				; $bea0: a8
+PRG06_bea0:
+			tay				; $bea0: a8
 			and #$7f				; $bea1: 29 7f
 			tax				; $bea3: aa
 			tya				; $bea4: 98
-			bmi g_bebd			; $bea5: 30 16
+			bmi PRG06_bebd			; $bea5: 30 16
 			lda $04c0			; $bea7: ad c0 04
 			ora #$80				; $beaa: 09 80
 			sta $04c0			; $beac: 8d c0 04
 			lda #$ff				; $beaf: a9 ff
 			sta $04c3			; $beb1: 8d c3 04
-			lda g_bfa9,x			; $beb4: bd a9 bf
+			lda PRG06_bfa9,x			; $beb4: bd a9 bf
 			sta $04c1			; $beb7: 8d c1 04
 			sta $04c2			; $beba: 8d c2 04
-g_bebd:		lda Input_RAM			; $bebd: a5 00
+PRG06_bebd:
+			lda Input_RAM			; $bebd: a5 00
 			and #$0f				; $bebf: 29 0f
-			beq g_bed4			; $bec1: f0 11
+			beq PRG06_bed4			; $bec1: f0 11
 			lda $04c0			; $bec3: ad c0 04
 			and #$7f				; $bec6: 29 7f
 			cmp #$02				; $bec8: c9 02
-			bcs g_bed4			; $beca: b0 08
+			bcs PRG06_bed4			; $beca: b0 08
 			lda #$01				; $becc: a9 01
 			sta $04c0			; $bece: 8d c0 04
-			jmp g_bef7			; $bed1: 4c f7 be
+			jmp PRG06_bef7			; $bed1: 4c f7 be
 
 ;-------------------------------------------------------------------------------
-g_bed4:		dec $04c2			; $bed4: ce c2 04
+PRG06_bed4:
+			dec $04c2			; $bed4: ce c2 04
 			bne +			; $bed7: d0 1d
-			lda g_bfae,x			; $bed9: bd ae bf
-			ldy g_bfb2,x			; $bedc: bc b2 bf
+			lda PRG06_bfae,x			; $bed9: bd ae bf
+			ldy PRG06_bfb2,x			; $bedc: bc b2 bf
 			sta LoadAddress_Low			; $bedf: 85 a5
 			sty LoadAddress_High			; $bee1: 84 a6
 			lda $04c1			; $bee3: ad c1 04
@@ -5063,22 +5139,23 @@ g_bed4:		dec $04c2			; $bed4: ce c2 04
 			inc $04c3			; $bee9: ee c3 04
 			ldy $04c3			; $beec: ac c3 04
 			lda (LoadedAddress),y		; $beef: b1 a5
-			beq g_bef7			; $bef1: f0 04
+			beq PRG06_bef7			; $bef1: f0 04
 			jsr Goto_LoadPalette			; $bef3: 20 d2 c0
 +			rts				; $bef6: 60
 
 ;-------------------------------------------------------------------------------
-g_bef7:		lda $04c0			; $bef7: ad c0 04
+PRG06_bef7:
+			lda $04c0			; $bef7: ad c0 04
 			and #$7f				; $befa: 29 7f
 			sta $04c0			; $befc: 8d c0 04
 			inc $04c0			; $beff: ee c0 04
 			lda $04c0			; $bf02: ad c0 04
 			cmp #$03				; $bf05: c9 03
 			bne +			; $bf07: d0 03
-			jsr g_bf1a			; $bf09: 20 1a bf
+			jsr PRG06_bf1a			; $bf09: 20 1a bf
 
 +			ldx $04c0			; $bf0c: ae c0 04
-			lda g_bfa9,x			; $bf0f: bd a9 bf
+			lda PRG06_bfa9,x			; $bf0f: bd a9 bf
 			bne +			; $bf12: d0 05
 
 			lda #$ff				; $bf14: a9 ff
@@ -5086,13 +5163,14 @@ g_bef7:		lda $04c0			; $bef7: ad c0 04
 +			rts				; $bf19: 60
 
 ;-------------------------------------------------------------------------------
-g_bf1a:		lda #$1e				; $bf1a: a9 1e
+PRG06_bf1a:
+			lda #$1e				; $bf1a: a9 1e
 			sta WriteToCHR2_RAM			; $bf1c: 85 e9
 			lda #$1c				; $bf1e: a9 1c
 			sta $eb			; $bf20: 85 eb
-			ldy #g_bf31_end-g_bf31				; $bf22: a0 78
+			ldy #PRG06_bf31_end-PRG06_bf31				; $bf22: a0 78
 			ldx #$00				; $bf24: a2 00
--			lda g_bf31,x			; $bf26: bd 31 bf
+-			lda PRG06_bf31,x			; $bf26: bd 31 bf
 			sta $0204,x		; $bf29: 9d 04 02
 			inx				; $bf2c: e8
 			dey				; $bf2d: 88
@@ -5100,7 +5178,8 @@ g_bf1a:		lda #$1e				; $bf1a: a9 1e
 			rts				; $bf30: 60
 
 ;-------------------------------------------------------------------------------
-g_bf31:		.byte $51, $c2, $02, $90	; $bf31: 51 c2 02 90	 Data
+PRG06_bf31:
+			.byte $51, $c2, $02, $90	; $bf31: 51 c2 02 90	 Data
 			.byte $51, $c4, $02, $98	; $bf35: 51 c4 02 98	 Data
 			.byte $61, $c6, $02, $90	; $bf39: 61 c6 02 90	 Data
 			.byte $61, $c8, $02, $98	; $bf3d: 61 c8 02 98	 Data
@@ -5130,13 +5209,16 @@ g_bf31:		.byte $51, $c2, $02, $90	; $bf31: 51 c2 02 90	 Data
 			.byte $81, $e0, $00, $98	; $bf9d: 81 e0 00 98	 Data
 			.byte $91, $da, $00, $40	; $bfa1: 91 da 00 40	 Data
 			.byte $91, $dc, $00, $48	; $bfa5: 91 dc 00 48	 Data
-g_bf31_end:
+PRG06_bf31_end:
 
-g_bfa9:		.byte $08, $88, $04, $04	; $bfa9: 08 88 04 04	 Data
+PRG06_bfa9:
+			.byte $08, $88, $04, $04	; $bfa9: 08 88 04 04	 Data
 			.byte $00	; $bfad: 00			Data
 			; TODO: table
-g_bfae:		.byte $b6, $b8, $ba, $bf	; $bfae: b6 b8 ba bf	 Data
-g_bfb2:		.byte $bf, $bf, $bf, $bf	; $bfb2: bf bf bf bf	 Data
+PRG06_bfae:
+			.byte $b6, $b8, $ba, $bf	; $bfae: b6 b8 ba bf	 Data
+PRG06_bfb2:
+			.byte $bf, $bf, $bf, $bf	; $bfb2: bf bf bf bf	 Data
 
 			.byte $3e, $00, $3e, $00	; $bfb6: 3e 00 3e 00	 Data
 			.byte $3e, $3f, $40, $41	; $bfba: 3e 3f 40 41	 Data
@@ -5150,6 +5232,5 @@ g_bfb2:		.byte $bf, $bf, $bf, $bf	; $bfb2: bf bf bf bf	 Data
 			.byte $ee, $df, $ff, $4c	; $bfda: ee df ff 4c	 Data
 			.byte $00, $c0
 			
-			BankEnding
 			BankEnd
 			.endlogical
