@@ -1502,6 +1502,7 @@ Main_c7cb:
 ;	Input:
 ;		None
 ;-------------------------------------------------------------------------------
+
 WaitFrame:
 			jsr Main_c388			; $c7d2: 20 88 c3
 			lda $c0			; $c7d5: a5 c0
@@ -5060,7 +5061,7 @@ PWG_CheckPassword:
 			jsr Main_e788			; $e5c3: 20 88 e7
 			bcc PWG_CheckDAM			; $e5c6: 90 03
 
-			jmp Main_e999			; $e5c8: 4c 99 e9
+			jmp GM_SoundTest			; $e5c8: 4c 99 e9
 
 ;-------------------------------------------------------------------------------
 PWG_CheckDAM:
@@ -5078,7 +5079,7 @@ PWG_CheckMars:
 			jsr Main_e788			; $e5db: 20 88 e7
 			bcc PWG_CheckJupiter			; $e5de: 90 05
 
-			lda #$01				; $e5e0: a9 01
+			lda #Planet_Mars				; $e5e0: a9 01
 			jmp PlayPlanet			; $e5e2: 4c 54 e9
 
 ;-------------------------------------------------------------------------------
@@ -5088,7 +5089,7 @@ PWG_CheckJupiter:
 			jsr Main_e788			; $e5e9: 20 88 e7
 			bcc PWG_CheckSaturn			; $e5ec: 90 05
 
-			lda #$02				; $e5ee: a9 02
+			lda #Planet_Jupiter				; $e5ee: a9 02
 			jmp PlayPlanet			; $e5f0: 4c 54 e9
 
 ;-------------------------------------------------------------------------------
@@ -5098,7 +5099,7 @@ PWG_CheckSaturn:
 			jsr Main_e788			; $e5f7: 20 88 e7
 			bcc PWG_CheckUranus			; $e5fa: 90 05
 
-			lda #$03				; $e5fc: a9 03
+			lda #Planet_Saturn				; $e5fc: a9 03
 			jmp PlayPlanet			; $e5fe: 4c 54 e9
 
 ;-------------------------------------------------------------------------------
@@ -5108,7 +5109,7 @@ PWG_CheckUranus:
 			jsr Main_e788			; $e605: 20 88 e7
 			bcc PWG_CheckPluto			; $e608: 90 05
 
-			lda #$04				; $e60a: a9 04
+			lda #Planet_Uranus				; $e60a: a9 04
 			jmp PlayPlanet			; $e60c: 4c 54 e9
 
 ;-------------------------------------------------------------------------------
@@ -5118,7 +5119,7 @@ PWG_CheckPluto:
 			jsr Main_e788			; $e613: 20 88 e7
 			bcc PWG_CheckNeptune			; $e616: 90 05
 
-			lda #$05				; $e618: a9 05
+			lda #Planet_Pluto				; $e618: a9 05
 			jmp PlayPlanet			; $e61a: 4c 54 e9
 
 ;-------------------------------------------------------------------------------
@@ -5128,7 +5129,7 @@ PWG_CheckNeptune:
 			jsr Main_e788			; $e621: 20 88 e7
 			bcc PWG_CheckPlanetX			; $e624: 90 05
 
-			lda #$06				; $e626: a9 06
+			lda #Planet_Neptune				; $e626: a9 06
 			jmp PlayPlanet			; $e628: 4c 54 e9
 
 ;-------------------------------------------------------------------------------
@@ -5138,7 +5139,7 @@ PWG_CheckPlanetX:
 			jsr Main_e788			; $e62f: 20 88 e7
 			bcc PWG_CheckStart			; $e632: 90 05
 
-			lda #$07				; $e634: a9 07
+			lda #Planet_PlanetX				; $e634: a9 07
 			jmp PlayPlanet			; $e636: 4c 54 e9
 
 ;-------------------------------------------------------------------------------
@@ -5564,57 +5565,75 @@ Main_e98d:
 			.byte $25, $24, $1f, $1a	; $e994: 25 24 1f 1a	 Data
 			.byte $15	; $e998: 15			Data
 
-			; TODO: this is sound test game mode
-Main_e999:
+;-------------------------------------------------------------------------------
+;	Sound test
+;-------------------------------------------------------------------------------
+
+GM_SoundTest:
 			jsr FadeInOut			; $e999: 20 f3 c6
 			jsr ClearScreen			; $e99c: 20 3a c5
 			jsr Main_c581			; $e99f: 20 81 c5
+
 			CrossBankJump 0, Sound_Goto_SetupAPU
-			ldx #>Main_ea11				; $e9a7: a2 ea
-			ldy #<Main_ea11				; $e9a9: a0 11
+
+			ldx #>SoundTest_DrawTexts	; $e9a7: a2 ea
+			ldy #<SoundTest_DrawTexts	; $e9a9: a0 11
 			jsr DrawTexts			; $e9ab: 20 57 c2
+
 			jsr Main_c72f			; $e9ae: 20 2f c7
 			lda #$00				; $e9b1: a9 00
 			sta $017f			; $e9b3: 8d 7f 01
-Main_e9b6:
+
+_loop:
 			jsr WaitFrame			; $e9b6: 20 d2 c7
 			jsr Main_c58f			; $e9b9: 20 8f c5
-			lda Input_RAM			; $e9bc: a5 00
-			and #Btn_A				; $e9be: 29 01
-			beq Main_e9cb			; $e9c0: f0 09
-			ldy $017f			; $e9c2: ac 7f 01
-			lda Main_ea25,y			; $e9c5: b9 25 ea
-			jsr PlaySound			; $e9c8: 20 63 c8
-Main_e9cb:
-			lda Input_RAM			; $e9cb: a5 00
-			and #Btn_B				; $e9cd: 29 02
-			beq Main_e9d6			; $e9cf: f0 05
+
+			lda Input_RAM
+			and #Btn_A		; Is button A pressed?
+			beq _checkB	; If not, check button B
+
+			; Play requested sound
+			ldy $017f
+			lda SoundTest_Sounds,y
+			jsr PlaySound
+
+_checkB:
+			lda Input_RAM
+			and #Btn_B		; Is button B pressed?
+			beq _checkUp	; If not, check button up
+			
+			; Stop music
 			CrossBankJump 0, Sound_Goto_SetupAPU
-Main_e9d6:
-			lda Input_RAM			; $e9d6: a5 00
-			and #Btn_Up				; $e9d8: 29 10
-			beq Main_e9ee			; $e9da: f0 12
-			lda $017f			; $e9dc: ad 7f 01
-			cmp #$2f				; $e9df: c9 2f
-			bcc Main_e9e8			; $e9e1: 90 05
-			lda #$ff				; $e9e3: a9 ff
-			sta $017f			; $e9e5: 8d 7f 01
-Main_e9e8:
+
+_checkUp:
+			lda Input_RAM
+			and #Btn_Up		; Is button Up pressed?
+			beq _checkDown	; If not, check button down
+
+			lda $017f
+			cmp #SoundTest_SoundCount	; Did the player try to press Up on the last sound?
+			bcc _increaseSound	; If not, just increase the number
+			lda #-1				; Otherwise reset to -1 (it's increased below, resulting in 0)
+			sta $017f
+_increaseSound:
 			inc $017f			; $e9e8: ee 7f 01
 			jsr Main_ea07			; $e9eb: 20 07 ea
-Main_e9ee:
-			lda Input_RAM			; $e9ee: a5 00
-			and #Btn_Down				; $e9f0: 29 20
-			beq Main_ea04			; $e9f2: f0 10
-			lda $017f			; $e9f4: ad 7f 01
-			bne Main_e9fe			; $e9f7: d0 05
-			lda #$30				; $e9f9: a9 30
-			sta $017f			; $e9fb: 8d 7f 01
-Main_e9fe:
+
+_checkDown:
+			lda Input_RAM
+			and #Btn_Down	; Is button down pressed?
+			beq _gotoLoop	; If not, loop
+
+			lda $017f		; Check the requested sound ID
+			bne _decreaseSound	; If it's not 0, just decrease it
+			lda #SoundTest_SoundCount+1	; Otherwise reset to sound count + 1
+			sta $017f		; (it's decreased below, resulting in sound count)
+_decreaseSound:
 			dec $017f			; $e9fe: ce 7f 01
 			jsr Main_ea07			; $ea01: 20 07 ea
-Main_ea04:
-			jmp Main_e9b6			; $ea04: 4c b6 e9
+
+_gotoLoop:
+			jmp _loop			; $ea04: 4c b6 e9
 
 ;-------------------------------------------------------------------------------
 Main_ea07:
@@ -5625,25 +5644,54 @@ Main_ea07:
 
 ;-------------------------------------------------------------------------------
 		;TODO: DrawTexts
-Main_ea11:
+SoundTest_DrawTexts:
 			.byte $21, $aa, $0b, $25
 			.byte $21, $27, $20, $16
 			.byte $00, $00, $26, $17
 			.byte $25, $26, $21, $ef
-			.byte $02, $02, $02, $00
-Main_ea25:
-			.byte $01, $1a, $03, $04	; $ea25: 01 1a 03 04	 Data
-			.byte $05, $06, $07, $02	; $ea29: 05 06 07 02	 Data
-			.byte $09, $0c, $0b, $0e	; $ea2d: 09 0c 0b 0e	 Data
-			.byte $0d, $0a, $08, $18	; $ea31: 0d 0a 08 18	 Data
-			.byte $15, $19, $17, $14	; $ea35: 15 19 17 14	 Data
-			.byte $11, $12, $10, $0f	; $ea39: 11 12 10 0f	 Data
-			.byte $13, $1b, $30, $31	; $ea3d: 13 1b 30 31	 Data
+			.byte $02, $02, $02
+			GameTextEnd
+
+SoundTest_SoundCount = SoundTest_Sounds_End - SoundTest_Sounds
+
+SoundTest_Sounds:
+			.byte MusID_JapanTitle
+			.byte MusID_JapanSolar
+			.byte MusID_MainMenu
+			.byte MusID_GameOver
+			.byte MusID_Death
+			.byte MusID_Unused1
+			.byte MusId_Unused2
+			.byte MusID_TheEarth
+			.byte MusID_Mars
+			.byte MusID_Jupiter
+			.byte MusID_Saturn
+			.byte MusID_Uranus
+			.byte MusID_Pluto
+			.byte MusID_Neptune
+			.byte MusID_InternTitle
+			.byte MusID_Unused4
+			.byte MusID_BossDefeat
+			.byte MusID_PasswordGame
+			.byte MusID_Credits
+			.byte MusID_Ghidorah
+			.byte MusID_Gigan
+			.byte MusID_MechaGodzilla
+			.byte MusID_Hedorah
+			.byte MusID_Moguera
+			.byte MusID_Gezora
+			.byte MusID_Varan
+			
+			; TODO: sfx
+			.byte $30, $31	; $ea3d: 13 1b 30 31	 Data
 			.byte $32, $33, $34, $35	; $ea41: 32 33 34 35	 Data
 			.byte $36, $37, $38, $39	; $ea45: 36 37 38 39	 Data
 			.byte $3a, $3b, $3c, $3d	; $ea49: 3a 3b 3c 3d	 Data
 			.byte $3e, $3f, $40, $41	; $ea4d: 3e 3f 40 41	 Data
-			.byte $42, $43, $44, $45	; $ea51: 42 43 44 45	 Data
+			.byte $42, $43, $44
+SoundTest_Sounds_End:
+
+			.byte $45	; Not sure what's this doing here
 
 ;-------------------------------------------------------------------------------
 ;	The game starting point

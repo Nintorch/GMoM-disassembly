@@ -1632,13 +1632,13 @@ Sound_Sub_MusicFadeOut:
 ;	TODO: make those as labels
 					TableStart
 					TableInsert Music_Empty
-					TableInsert Music_JapanTitle	; (unused in international ROM)
+MusID_JapanTitle:	TableInsert Music_JapanTitle	; (unused in international ROM)
 MusID_TheEarth:		TableInsert $8dfb
 MusID_MainMenu:		TableInsert $916c
 MusID_GameOver:		TableInsert $9202
 MusID_Death:		TableInsert $932b
-					TableInsert $93eb	; (unused)
-					TableInsert $948a	; (unused)
+MusID_Unused1:		TableInsert $93eb	; (unused)
+MusId_Unused2:		TableInsert $948a	; (unused)
 MusID_InternTitle:	TableInsert $9510
 MusID_PlanetX	=	MusID_InternTitle
 MusID_Mars:			TableInsert $999d
@@ -1655,9 +1655,9 @@ MusID_MechaGodzilla:	TableInsert $ab76
 MusID_Gezora:		TableInsert $acab
 MusID_Ghidorah:		TableInsert $ae02
 MusID_BossDefeat:	TableInsert $af44
-					TableInsert $b015	; (unused)
+MusID_Unused3:		TableInsert $b015	; (unused)
 MusID_Credits:		TableInsert $b190
-					TableInsert $b3a7	; Gh1d0ra (unused)
+MusID_Unused4:		TableInsert $b3a7	; Gh1d0ra (unused)
 MusID_PasswordGame:	TableInsert $b510
 MusID_JapanSolar:	TableInsert $b5ac	; Japan Solar System (unused in international ROM)
 MusID_Varan:		TableInsert $b9c6

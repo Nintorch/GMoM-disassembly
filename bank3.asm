@@ -5548,9 +5548,9 @@ Enc_MessageBox	.encode
 
 			.endencode
 
-T_END = $80
-T_YESNO = $81
-T_BOSSLIFE = $82
+T_END 		= $80
+T_YESNO 	= $81
+T_BOSSLIFE 	= $82
 
 			.encode Enc_MessageBox
 PRG03_MBT_Empty:					.byte T_END
