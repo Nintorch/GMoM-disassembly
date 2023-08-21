@@ -12,7 +12,7 @@ To check if the built ROM is bit-perfect, add the GMoM (USA) ROM into your direc
 where you unzipped/cloned the disassembly under the name of "rom.nes" and run compare.bat.
 
 I chose 64tass and not any other popular assembler (asm6 or nesasm)
-because I want the disassembly to be more "user friendly"
+because I want the assembler to be both powerful and more "user-friendly"
 (check out [64tass documentation](https://tass64.sourceforge.net/)
 for all the features it can offer, for example the user can use custom
 encodings to map characters and escape sequences to byte values and
