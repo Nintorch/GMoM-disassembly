@@ -31,13 +31,12 @@ BankStartAddress .var 0
 BankEndAddress .var 0
 LastBank .var 0
 
-BankHeader .segment id
+BankHeader .segment
 	BankStartAddress .var * & $F000
-	.if \id!=(PRGBankCount-1) ; last PRG bank
-		.byte \id
+	.if LastBank!=(PRGBankCount-1) ; last PRG bank
+		.byte LastBank
 	.endif
-	.byte $62, $6b, $30+\id
-	LastBank .var \id
+	.byte $62, $6b, $30+LastBank
 	.endsegment
 
 BankEnd .segment
@@ -61,6 +60,7 @@ BankEnd .segment
 		.warn "Bank ", repr(LastBank), " is small (", *, ")"
 	.endif
 
+	LastBank += 1
 	.align PRGBankSize
 	.endsegment
 
@@ -120,7 +120,7 @@ GameTextEnd .macro
 ;-------------------------------------------------------------------------------
 
 MusicFadeOut .macro
-		CrossBankJump 0, Sound_Goto_MusicFadeOut
+		CrossBankJump Sound_Bank, Sound_Goto_MusicFadeOut
 	.endm
 
 ;-------------------------------------------------------------------------------

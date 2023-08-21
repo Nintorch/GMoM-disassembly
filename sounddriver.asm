@@ -4,7 +4,73 @@
 ;-------------------------------------------------------------------------------
 
 			.logical $8000
-			BankHeader 0
+			BankHeader
+
+Sound_Bank	=	LastBank
+
+;-------------------------------------------------------------------------------
+;	CSF - Compile Sound Format
+;-------------------------------------------------------------------------------
+
+;	Track header
+
+CSF_HeaderStart .function end_label
+			.byte (end_label-*-1)/10
+		.endf
+
+CSF_Pulse .macro duty, env_loop, cvolume, volume
+			.cerror \duty > 3 || \env_loop > 1 || \cvolume > 1 || \volume > 15, "Invalid value"
+			.byte \duty << 6 | \env_loop << 5 | \cvolume << 4 | \volume
+		.endm
+
+CSF_PulseSweep .macro enable, period, negate, shift_count
+			.cerror \enable > 1 || \period > 7 || \negate > 1 || \shift_count > 7, "Invalid value"
+			.byte \enable << 7 | \period << 4 | \negate << 3 | \shift_count
+		.endm
+		
+CSF_InitialVoice .macro voice
+			.byte \voice
+		.endm
+
+CSF_Pitch .macro pitch
+			.byte \pitch
+		.endm
+
+CSF_Tempo .macro tempo
+			.byte \tempo
+		.endm
+
+;	Track commands
+
+CSF_SetSpeedDivider	.macro dv
+			.byte $e0 | \dv
+		.endm
+		
+CSF_Jump .function address
+			.byte $80
+			.addr address
+		.endf
+
+CSF_Loop .function address
+			.byte $81, $70
+			.addr address
+		.endf
+
+CSF_Stop .macro
+			.byte $82
+		.endm
+
+CSF_SetVoice .function id
+			.byte $88, id
+		.endf
+
+CSF_Command .function id, value
+			.byte id, value
+		.endf
+
+CSF_CommandFiller .function id, value
+			.byte id, $70, value
+		.endf
 
 ;-------------------------------------------------------------------------------
 ;	Cross bank jump labels
@@ -22,12 +88,15 @@ Sound_Goto_PlaySound:
 			jmp Sound_PlaySound			; $800a: 4c 2d 87
 
 ;-------------------------------------------------------------------------------
-			jmp Sound_8019			; $800d: 4c 19 80
+Sound_Goto_Update:
+			jmp Sound_Update			; $800d: 4c 19 80
 
 ;-------------------------------------------------------------------------------
+Sound_Goto_8900:
 			jmp Sound_8900			; $8010: 4c 00 89
 
 ;-------------------------------------------------------------------------------
+Sound_Goto_8905:
 			jmp Sound_8905			; $8013: 4c 05 89
 
 ;-------------------------------------------------------------------------------
@@ -36,7 +105,7 @@ Sound_Goto_MusicFadeOut:
 
 ;-------------------------------------------------------------------------------
 
-Sound_8019:
+Sound_Update:
 			lda $030f			; $8019: ad 0f 03
 			beq Sound_801f			; $801c: f0 01
 			rts				; $801e: 60
@@ -349,52 +418,57 @@ Sound_8228:
 			lda $0354,x		; $822d: bd 54 03
 			sta $d1			; $8230: 85 d1
 			ldy #$ff				; $8232: a0 ff
-Sound_8234:
+Sound_ReadTrack:
 			iny				; $8234: c8
 			ldx $030b			; $8235: ae 0b 03
-			lda ($d0),y		; $8238: b1 d0
-			bmi Sound_823f			; $823a: 30 03
+			lda ($d0),y		; Load data from the track
+			bmi Sound_ReadCommands	; If it's a command, branch
 			jmp Sound_8486			; $823c: 4c 86 84
 
 ;-------------------------------------------------------------------------------
-Sound_823f:
+Sound_ReadCommands:
 			cmp #$b0				; $823f: c9 b0
-			bcc Sound_8246			; $8241: 90 03
+			bcc Sound_ReadCommand			; $8241: 90 03
 			jmp Sound_8423			; $8243: 4c 23 84
 
 ;-------------------------------------------------------------------------------
-Sound_8246:
+Sound_ReadCommand:
 			asl				; $8246: 0a
 			tax				; $8247: aa
-			lda #>(Sound_8234-1)				; $8248: a9 82
+
+			; Push Sound_8234 to the stack
+			lda #>(Sound_ReadTrack-1)				; $8248: a9 82
 			pha				; $824a: 48
-			lda #<(Sound_8234-1)				; $824b: a9 33
+			lda #<(Sound_ReadTrack-1)				; $824b: a9 33
 			pha				; $824d: 48
-			lda Sound_825d+1,x			; $824e: bd 5e 82
+			; Push command to the stack
+			lda Sound_CmdTable+1,x			; $824e: bd 5e 82
 			pha				; $8251: 48
-			lda Sound_825d,x			; $8252: bd 5d 82
+			lda Sound_CmdTable,x			; $8252: bd 5d 82
 			pha				; $8255: 48
+			; Load next value from the track
 			ldx $030b			; $8256: ae 0b 03
 			iny				; $8259: c8
 			lda ($d0),y		; $825a: b1 d0
-			rts				; $825c: 60
+			rts		; rts jumps to the command,
+					; the command then returns to Sound_8234
 
 ;-------------------------------------------------------------------------------
 			TableStart
-			TableInsert Sound_829f
-			TableInsert Sound_82aa
-			TableInsert Sound_82cb
+			TableInsert Sound_CmdJump	; $80
+			TableInsert Sound_CmdLoop	; $81
+			TableInsert Sound_CmdStop		
 			TableInsert Sound_82d7
 			TableInsert Sound_8321
 			TableInsert Sound_82d0
 			TableInsert Sound_82c5
 			TableInsert Sound_830b
-			TableInsert Sound_82db
+			TableInsert Sound_CmdSetVoice
 			TableInsert Sound_82df
-			TableInsert Sound_82ed
+			TableInsert Sound_82ed ; $8A
 			TableInsert Sound_PlaySound
 			TableInsert Sound_8415
-			TableInsert Sound_82b9
+			TableInsert Sound_Cmd8D
 			TableInsert Sound_83bd
 			TableInsert Sound_83c1
 			TableInsert Sound_82e9
@@ -415,10 +489,10 @@ Sound_8246:
 			TableInsert Sound_841f
 			TableInsert Sound_8318
 
-Sound_825d:	.addr CurrentTable-1
+Sound_CmdTable:	.addr CurrentTable-1
 
 ;-------------------------------------------------------------------------------
-Sound_829f:
+Sound_CmdJump:
 			tax				; $829f: aa
 			iny				; $82a0: c8
 			lda ($d0),y		; $82a1: b1 d0
@@ -428,19 +502,19 @@ Sound_829f:
 			rts				; $82a9: 60
 
 ;-------------------------------------------------------------------------------
-Sound_82aa:
+Sound_CmdLoop:
 			clc				; $82aa: 18
 			adc $030b			; $82ab: 6d 0b 03
 			tax				; $82ae: aa
 			iny				; $82af: c8
 			lda ($d0),y		; $82b0: b1 d0
 			dec $031c,x		; $82b2: de 1c 03
-			bne Sound_829f			; $82b5: d0 e8
+			bne Sound_CmdJump			; $82b5: d0 e8
 			iny				; $82b7: c8
 			rts				; $82b8: 60
 
 ;-------------------------------------------------------------------------------
-Sound_82b9:
+Sound_Cmd8D:
 			clc				; $82b9: 18
 			adc $030b			; $82ba: 6d 0b 03
 			tax				; $82bd: aa
@@ -453,7 +527,7 @@ Sound_82b9:
 Sound_82c5:
 			lda $03a8,x		; $82c5: bd a8 03
 			sta $0300			; $82c8: 8d 00 03
-Sound_82cb:
+Sound_CmdStop:
 			lda #$00				; $82cb: a9 00
 			sta $031c,x		; $82cd: 9d 1c 03
 Sound_82d0:
@@ -469,7 +543,7 @@ Sound_82d7:
 			rts				; $82da: 60
 
 ;-------------------------------------------------------------------------------
-Sound_82db:
+Sound_CmdSetVoice:
 			sta $032a,x		; $82db: 9d 2a 03
 			rts				; $82de: 60
 
@@ -576,7 +650,7 @@ Sound_8374:
 			bne Sound_8380			; $8379: d0 05
 Sound_837b:
 			lda ($d0),y		; $837b: b1 d0
-			jmp Sound_829f			; $837d: 4c 9f 82
+			jmp Sound_CmdJump			; $837d: 4c 9f 82
 
 ;-------------------------------------------------------------------------------
 Sound_8380:
@@ -795,7 +869,7 @@ Sound_84a1:
 Sound_84ac:
 			sty $d2			; $84ac: 84 d2
 			tay				; $84ae: a8
-			lda Sound_8908,y			; $84af: b9 08 89
+			lda Sound_8909-1,y			; $84af: b9 08 89
 			ldy $d2			; $84b2: a4 d2
 Sound_84b4:
 			iny				; $84b4: c8
@@ -907,9 +981,9 @@ Sound_856d:
 			beq Sound_85a4			; $8570: f0 32
 			asl				; $8572: 0a
 			tay				; $8573: a8
-			lda Sound_896e,y			; $8574: b9 6e 89
+			lda Sound_VoiceBank,y			; $8574: b9 6e 89
 			sta $d2			; $8577: 85 d2
-			lda Sound_896e+1,y			; $8579: b9 6f 89
+			lda Sound_VoiceBank+1,y			; $8579: b9 6f 89
 			sta $d3			; $857c: 85 d3
 			ldy $03ee,x		; $857e: bc ee 03
 			jsr Sound_85ab			; $8581: 20 ab 85
@@ -1188,17 +1262,20 @@ Sound_SetupAPU:
 Sound_PlaySound:
 			inc $030f			; $872d: ee 0f 03
 			sta $d2			; $8730: 85 d2
+
 			txa				; $8732: 8a
-			pha				; $8733: 48
+			pha		; Push X register to the stack
 			tya				; $8734: 98
-			pha				; $8735: 48
+			pha		; Push Y register to the stack
+
 			lda $d2			; $8736: a5 d2
 			jsr Sound_SetupPitchVolume			; $8738: 20 45 87
 			lda #$00				; $873b: a9 00
 			sta $030f			; $873d: 8d 0f 03
-			pla				; $8740: 68
+
+			pla		; Pull Y register from the stack
 			tay				; $8741: a8
-			pla				; $8742: 68
+			pla		; Pull X register from the stack
 			tax				; $8743: aa
 			rts				; $8744: 60
 
@@ -1255,9 +1332,9 @@ Sound_8793:
 			iny				; $8793: c8
 			sta $d5			; $8794: 85 d5
 Sound_8796:
-			lda ($d2),y		; $8796: b1 d2
-			iny				; $8798: c8
-			tax				; $8799: aa
+			lda ($d2),y		; Load the channel id
+			iny				; Increase Y
+			tax				; X = Channel ID + 1
 			lda ($d2),y		; $879a: b1 d2
 			beq Sound_876a			; $879c: f0 cc
 			lda $031c,x		; $879e: bd 1c 03
@@ -1282,18 +1359,18 @@ Sound_8796:
 Sound_87d0:
 			sta $03a8,x		; $87d0: 9d a8 03
 Sound_87d3:
-			txa				; $87d3: 8a
+			txa				; A = Channel ID + 1
 			pha				; $87d4: 48
-			lda #$09				; $87d5: a9 09
+			lda #$09		; Load the rest of the channel header data
 			sta $d4			; $87d7: 85 d4
 
 -			lda ($d2),y		; $87d9: b1 d2
 			iny				; $87db: c8
 			sta $031c,x		; $87dc: 9d 1c 03
-			txa				; $87df: 8a
+			txa				; A = Channel ID + 1
 			clc				; $87e0: 18
-			adc #$07				; $87e1: 69 07
-			tax				; $87e3: aa
+			adc #$07		; A = Channel ID + 8
+			tax				; X = A
 			dec $d4			; $87e4: c6 d4
 			bne -			; $87e6: d0 f1
 
@@ -1396,15 +1473,16 @@ Sound_8867:
 ;-------------------------------------------------------------------------------
 Sound_8900:
 			lda #$03				; $8900: a9 03
+Sound_8902:
 			sta $d6			; $8902: 85 d6
 			rts				; $8904: 60
 
 ;-------------------------------------------------------------------------------
 Sound_8905:
 			lda #$01				; $8905: a9 01
-			.byte $d0	; $8907: d0		Suspected data
-Sound_8908:
-			sbc $0201,y		; $8908: f9 01 02
+			bne Sound_8902
+Sound_8909:
+			.byte $01, $02
 
 ;-------------------------------------------------------------------------------
 			.byte $03, $04, $06, $08	; $890b: 03 04 06 08	 Data
@@ -1414,16 +1492,20 @@ Sound_8917:	.byte $03	; $8917: 03			Data
 Sound_8918:	.byte $00	; $8918: 00			Data
 Sound_8919:	.byte $49	; $8919: 49			Data
 Sound_891a:	.byte $19, $0e, $00	; $891a: 19 0e 00		Data
-	;TODO: table
-Sound_891d:
-			.byte $47	; $891d: 47			Data
-			.byte $19, $27, $89, $30	; $891e: 19 27 89 30	 Data
-			.byte $89, $52, $89, $5f	; $8922: 89 52 89 5f	 Data
-			.byte $89
 
+Sound_891d:
+			.addr $1947
+			.addr Sound_8927
+			.addr Sound_8930
+			.addr Sound_8952
+			.addr Sound_895f
+
+Sound_8927:
 			.byte $02, $01, $00	; $8926: 89 02 01 00	 Data
 			.byte $ff, $fe, $ff, $00	; $892a: ff fe ff 00	 Data
-			.byte $01, $82, $00, $00	; $892e: 01 82 00 00	 Data
+			.byte $01, $82
+Sound_8930:
+			.byte $00, $00
 			.byte $00, $00, $00, $00	; $8932: 00 00 00 00	 Data
 			.byte $00, $00, $00, $00	; $8936: 00 00 00 00	 Data
 			.byte $00, $00, $00, $00	; $893a: 00 00 00 00	 Data
@@ -1432,14 +1514,18 @@ Sound_891d:
 			.byte $00, $00, $00, $01	; $8946: 00 00 00 01	 Data
 			.byte $00, $00, $fe, $00	; $894a: 00 00 fe 00	 Data
 			.byte $00, $01, $81, $08	; $894e: 00 01 81 08	 Data
+Sound_8952:
 			.byte $00, $00, $00, $01	; $8952: 00 00 00 01	 Data
 			.byte $00, $00, $00, $00	; $8956: 00 00 00 00	 Data
 			.byte $00, $ff, $00, $00	; $895a: 00 ff 00 00	 Data
-			.byte $82, $0c, $f4, $00	; $895e: 82 0c f4 00	 Data
+			.byte $82
+Sound_895f:
+			.byte $0c, $f4, $00
 			.byte $08, $fc, $0a, $f5	; $8962: 08 fc 0a f5	 Data
 			.byte $00, $07, $f7, $0c	; $8966: 00 07 f7 0c	 Data
 			.byte $fb, $00, $08, $f4	; $896a: fb 00 08 f4	 Data
-Sound_896e:
+			; TODO: table of voices
+Sound_VoiceBank:
 			.byte $00	; $896e: 00			Data
 			.byte $82, $90, $89, $ad	; $896f: 82 90 89 ad	 Data
 			.byte $89, $b8, $89, $c1	; $8973: 89 b8 89 c1	 Data
@@ -1566,32 +1652,6 @@ Sound_896e:
 			.byte $0a, $00, $80
 
 ;-------------------------------------------------------------------------------
-; CSF - Compile Sound Format
-
-CSF_SetVoice .function id
-			.byte $88, id
-	.endf
-
-;	These 2 may need better names...
-CSF_Loop .function address
-			.byte $81, $70
-			.addr address
-	.endf
-CSF_Jump .function address
-			.byte $80
-			.addr address
-	.endf
-
-CSF_HeaderStart .function end
-			.byte (end-*-1)/10
-	.endf
-
-CSF_Stop .macro
-			.byte $82
-	.endm
-
-;	TODO: other commands
-;-------------------------------------------------------------------------------
 
 ; Supposedly an empty music track
 Music_Empty:
@@ -1694,10 +1754,15 @@ Sound_SoundTable:	.addr CurrentTable
 
 Music_JapanTitle:
 			CSF_HeaderStart _ChannelListEnd
-
+			
 	;	TODO: macro for channels?
-			.byte $00, $01, $bf, $04
-			.byte $00, $f7, $78, $00
+			.byte $00, $01
+			CSF_Pulse	2, 1, 1, 15
+			CSF_InitialVoice $04
+			CSF_PulseSweep 0, 0, 0, 0
+			CSF_Pitch $f7
+			CSF_Tempo $78
+			.byte $00
 			.addr _channel1
 			.byte $01, $01, $7f, $04
 			.byte $41, $03, $78, $02
@@ -1707,22 +1772,26 @@ Music_JapanTitle:
 			.addr _channel3
 			.byte $03, $02, $3b, $04
 			.byte $00, $00, $78, $03
-			.addr channel4
+			.addr _noise
 
 _ChannelListEnd
 
 _channel1:
 			CSF_SetVoice $04
-			.byte $23, $e1	; $8c3c: 88 04 23 e1	 Data
-			.byte $24, $e0, $0b
-			.byte $8a, $ff	; some command
-			.byte $18, $e8, $18	; $8c44: ff 18 e8 18	 Data
-			.byte $18, $18, $18, $18	; $8c48: 18 18 18 18	 Data
+			.byte $23
+			CSF_SetSpeedDivider 1
+			.byte $24
+			CSF_SetSpeedDivider 0
+			.byte $0b
+			CSF_Command $8a, $ff
 			.byte $18
+			CSF_SetSpeedDivider 8
+			.byte $18, $18, $18
+			.byte $18, $18, $18
 _ch1_loop:
 			CSF_SetVoice $07
-			.byte $8a, $01	; $8c4c: 18 88 07 8a	 Data
-			.byte $8d, $70, $02	; $8c50: 01 8d 70 02	 Data
+			CSF_Command $8a, $01
+			CSF_CommandFiller $8d, $02
 -
 			.byte $25, $e5, $24, $22	; $8c54: 25 e5 24 22	 Data
 			.byte $e8, $25, $e5, $24	; $8c58: e8 25 e5 24	 Data
@@ -1747,6 +1816,7 @@ _ch1_loop:
 			.byte $27, $25, $24, $27	; $8ca4: 27 25 24 27	 Data
 			.byte $27, $25, $25, $24	; $8ca8: 27 25 25 24	 Data
 			.byte $24, $22
+
 			CSF_Loop -
 
 			CSF_SetVoice $04	; $8cb0: 54 8c 88 04	 Data
@@ -1861,7 +1931,7 @@ _ch3_loop:
 			CSF_Jump _ch3_loop
 			CSF_Stop
 
-channel4:
+_noise:
 			.byte $00	; $8dd8: 6d 8d 82 00	 Data
 			.byte $ee, $00, $ed, $00	; $8ddc: ee 00 ed 00	 Data
 			.byte $e5, $c0, $e3, $c0	; $8de0: e5 c0 e3 c0	 Data

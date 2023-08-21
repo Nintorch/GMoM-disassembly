@@ -3,7 +3,7 @@
 ;-------------------------------------------------------------------------------
 
 			.logical $8000
-			BankHeader 5
+			BankHeader
 
 PRG05_Goto_SkyMappings_L:
 			.addr PRG05_SkyMappings

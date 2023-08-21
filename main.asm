@@ -28,7 +28,7 @@ PRGBankCount = 8
 CHRBankCount = 32
 	CheckPowerOfTwo CHRBankCount
 
-; 	TODO: fix all Goto_CrossBankJump and CrossBankJump using CBJR
+; 	TODO: fix all Goto_CrossBankJump and CrossBankJump using CBJR, same for Main_SwitchBank
 ;	TODO: document palettes and make the use of their ids in the code
 
 CBJR .macro
@@ -61,6 +61,7 @@ x = (a-$2020)-(y*$20)
 			.byte $00, $00, $00, $00	; iNES Tail
 			.byte $00, $00, $00, $00
 
+		; TODO: Bank constants
 ;-------------------------------------------------------------------------------
 ; PRG
 ;-------------------------------------------------------------------------------
@@ -73,7 +74,8 @@ x = (a-$2020)-(y*$20)
 			.include "bank5.asm"
 			.include "bank6.asm"
 
-	.fill (PRGBankCount-LastBank-2)*PRGBankSize
+	; Main bank has to be last
+	.fill (PRGBankCount-LastBank-1)*PRGBankSize
 
 			.include "mainbank.asm"
 
@@ -83,4 +85,5 @@ x = (a-$2020)-(y*$20)
 
 			.include "chr.asm"
 
+			.end
 ; End of ROM

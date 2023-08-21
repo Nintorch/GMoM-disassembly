@@ -3,7 +3,7 @@
 ;-------------------------------------------------------------------------------
 
 			.logical $8000
-			BankHeader 4
+			BankHeader
 
 ;-------------------------------------------------------------------------------
 ;	Cross bank jump labels
@@ -6260,8 +6260,7 @@ PRG04_aca0:
 			lda PRG04_acfc,y			; $acca: b9 fc ac
 			sta $cc			; $accd: 85 cc
 
-			lda #$39				; $accf: a9 39
-			jsr Goto_CrossBankJump			; $acd1: 20 cf c0
+			CrossBankJump	PRG01_Bank, PRG01_Goto_ba31
 
 			pla				; $acd4: 68
 			tax				; $acd5: aa

@@ -3,7 +3,7 @@
 ;-------------------------------------------------------------------------------
 
 			.logical $8000
-			BankHeader 2
+			BankHeader
 
 			.byte $49, $20, $61, $6d	; $8004: 49 20 61 6d	 Data
 			.byte $20, $51	; $8008: 20 51		 Data
@@ -1606,6 +1606,7 @@ PRG02_9155:
 			jmp Main_c0ff			; $915f: 4c ff c0
 
 ;-------------------------------------------------------------------------------
+	;TODO: decompile?
 PRG02_9162:
 			.byte $06, $0c, $18, $30	; $9162: 06 0c 18 30	 Data
 			.byte $60, $00, $00, $00	; $9166: 60 00 00 00	 Data
@@ -1784,8 +1785,8 @@ PRG02_9162:
 			.byte $c6, $29, $07, $d0	; $941a: c6 29 07 d0	 Data
 			.byte $27, $de, $f8, $05	; $941e: 27 de f8 05	 Data
 			.byte $a9, $0b, $85, $cc	; $9422: a9 0b 85 cc	 Data
-			.byte $a9, $39, $20, $cf	; $9426: a9 39 20 cf	 Data
-			.byte $c0, $a9, $b3, $20	; $942a: c0 a9 b3 20	 Data
+			CrossBankJump	PRG01_Bank, PRG01_Goto_ba31
+			.byte $a9, $b3, $20	; $942a: c0 a9 b3 20	 Data
 			.byte $c6, $c0, $a6, $a7	; $942e: c6 c0 a6 a7	 Data
 			.byte $bd, $f8, $05, $29	; $9432: bd f8 05 29	 Data
 			.byte $01, $f0, $08, $a0	; $9436: 01 f0 08 a0	 Data

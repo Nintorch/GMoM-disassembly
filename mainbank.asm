@@ -23,7 +23,7 @@ irq:
 			jmp Main_f04f			; $c006: 4c 4f f0
 
 ;-------------------------------------------------------------------------------
-			BankHeader PRGBankCount-1
+			BankHeader
 
 			jmp Main_c105			; $c00c: 4c 05 c1
 
@@ -243,7 +243,7 @@ Goto_PlaySound:
 			jmp WaitUntilInput			; $c0c9: 4c 71 c8
 
 ;-------------------------------------------------------------------------------
-			jmp Main_c93c			; $c0cc: 4c 3c c9
+			jmp Main_SwitchBank			; $c0cc: 4c 3c c9
 
 ;-------------------------------------------------------------------------------
 Goto_CrossBankJump:
@@ -1451,8 +1451,8 @@ Main_c779:
 
 ;-------------------------------------------------------------------------------
 Main_c780:
-			lda #$20				; $c780: a9 20
-			jsr Sub_CrossBankJump			; $c782: 20 0d c9
+			CrossBankJump Sound_Bank, Sound_Goto_8900
+
 			lda #$00				; $c785: a9 00
 			sta Input_RAM			; $c787: 85 00
 			lda $06			; $c789: a5 06
@@ -1464,7 +1464,7 @@ Main_c790:
 			jsr Main_c58f			; $c793: 20 8f c5
 			lda #$03				; $c796: a9 03
 			inc $c6			; $c798: e6 c6
-			jsr Main_c93c			; $c79a: 20 3c c9
+			jsr Main_SwitchBank			; $c79a: 20 3c c9
 			jsr $8004			; $c79d: 20 04 80
 			jsr Main_f04e			; $c7a0: 20 4e f0
 			lda Input_RAM			; $c7a3: a5 00
@@ -1472,8 +1472,7 @@ Main_c790:
 			beq Main_c790			; $c7a7: f0 e7
 			pla				; $c7a9: 68
 			sta $06			; $c7aa: 85 06
-			lda #$28				; $c7ac: a9 28
-			jmp Sub_CrossBankJump			; $c7ae: 4c 0d c9
+			CrossBankJump Sound_Bank, Sound_Goto_8905, true
 
 ;-------------------------------------------------------------------------------
 Main_c7b1:
@@ -1613,7 +1612,7 @@ PlaySound:
 			sta $0a			; $c867: 85 0a
 +
 			and #$7f				; $c869: 29 7f
-			CrossBankJump 0, Sound_Goto_PlaySound
+			CrossBankJump Sound_Bank, Sound_Goto_PlaySound
 			rts				; $c870: 60
 
 ;-------------------------------------------------------------------------------
@@ -1743,7 +1742,7 @@ Sub_CrossBankJump:
 			txa				; $c913: 8a
 
 			; switch the bank
-			jsr Main_c93c			; $c914: 20 3c c9
+			jsr Main_SwitchBank			; $c914: 20 3c c9
 
 			lda #>(Main_c939-1)				; $c917: a9 c9
 			pha				; $c919: 48
@@ -1770,7 +1769,7 @@ Main_c925:
 Main_c939:
 			sta $cc			; $c939: 85 cc
 			pla				; $c93b: 68
-Main_c93c:
+Main_SwitchBank:
 			sta $0b			; $c93c: 85 0b
 			and #PRGBankCount-1				; $c93e: 29 07
 			jmp BankSwitch			; $c940: 4c ad c3
@@ -1790,7 +1789,7 @@ Main_c94d:
 			cmp #$70				; $c957: c9 70
 			bcc Main_c96e			; $c959: 90 13
 			lda $e3			; $c95b: a5 e3
-			jsr Main_c93c			; $c95d: 20 3c c9
+			jsr Main_SwitchBank			; $c95d: 20 3c c9
 			lda $d9			; $c960: a5 d9
 			and #$0f				; $c962: 29 0f
 			cmp #$0f				; $c964: c9 0f
@@ -2175,7 +2174,7 @@ Main_cc61:
 Main_cc75:
 			lda #$06				; $cc75: a9 06
 			sta $e3			; $cc77: 85 e3
-			jsr Main_c93c			; $cc79: 20 3c c9
+			jsr Main_SwitchBank			; $cc79: 20 3c c9
 			lda $8004			; $cc7c: ad 04 80
 			sta $a3			; $cc7f: 85 a3
 			lda $8005			; $cc81: ad 05 80
@@ -2232,14 +2231,13 @@ Main_cc75:
 			sta $4a			; $ccd8: 85 4a
 			rts				; $ccda: 60
 
-; TODO: if there's a comment before a label, remove an empty line between the comment and the label
-
 ;-------------------------------------------------------------------------------
 ;	Load a palette
 ;
 ;	Input:
 ;		A - Palette ID
 ;-------------------------------------------------------------------------------
+
 LoadPalette:
 			sta $a0			; $ccdb: 85 a0
 			and #$7f				; $ccdd: 29 7f
@@ -2335,7 +2333,7 @@ Main_cd2b:
 
 ;-------------------------------------------------------------------------------
 Main_cd6a:
-			jsr Main_c93c			; $cd6a: 20 3c c9
+			jsr Main_SwitchBank			; $cd6a: 20 3c c9
 			stx LoadAddress_High			; $cd6d: 86 a6
 			sty LoadAddress_Low			; $cd6f: 84 a5
 			ldy #$00				; $cd71: a0 00
@@ -2456,7 +2454,7 @@ Main_ce02:
 			pla				; $ce20: 68
 			tax				; $ce21: aa
 			pla				; $ce22: 68
-			jmp Main_c93c			; $ce23: 4c 3c c9
+			jmp Main_SwitchBank			; $ce23: 4c 3c c9
 
 ;-------------------------------------------------------------------------------
 Main_ce26:
@@ -3245,8 +3243,7 @@ Main_d6cc:
 			lda $3b			; $d6db: a5 3b
 			and #$10				; $d6dd: 29 10
 			bne Main_d6f5			; $d6df: d0 14
-			lda #$41				; $d6e1: a9 41
-			jsr Sub_CrossBankJump			; $d6e3: 20 0d c9
+			CrossBankJump	PRG01_Bank, PRG01_Goto_8524
 			bcc Main_d6f5			; $d6e6: 90 0d
 			lda #$0b				; $d6e8: a9 0b
 			sta $0400,y		; $d6ea: 99 00 04
@@ -3258,8 +3255,7 @@ Main_d6cc:
 Main_d6f5:
 			lda #$14				; $d6f5: a9 14
 			sta $cc			; $d6f7: 85 cc
-			lda #$39				; $d6f9: a9 39
-			jsr Sub_CrossBankJump			; $d6fb: 20 0d c9
+			CrossBankJump	PRG01_Bank, PRG01_Goto_ba31
 			ldy #$00				; $d6fe: a0 00
 			jsr Main_d47b			; $d700: 20 7b d4
 Main_d703:
@@ -3470,7 +3466,7 @@ GM_Level:
 ;-------------------------------------------------------------------------------
 +			lda #$06				; $d948: a9 06
 			sta $e3			; $d94a: 85 e3
-			jsr Main_c93c			; $d94c: 20 3c c9
+			jsr Main_SwitchBank			; $d94c: 20 3c c9
 
 			; Push $A7 onto the stack
 			lda $a7
@@ -3498,8 +3494,7 @@ Main_d96b:
 			sta $02			; $d976: 85 02
 			sta $03			; $d978: 85 03
 
-			lda #$01				; $d97a: a9 01
-			jsr Sub_CrossBankJump			; $d97c: 20 0d c9
+			CrossBankJump	PRG01_Bank, PRG01_Goto_81d4
 			lda #$22				; $d97f: a9 22
 			jsr Sub_CrossBankJump			; $d981: 20 0d c9
 			lda #$03				; $d984: a9 03
@@ -3515,7 +3510,7 @@ Main_d96b:
 
 			tax
 			pla	; Pull $0B from the stack
-			jmp Main_c93c			; $d997: 4c 3c c9
+			jmp Main_SwitchBank			; $d997: 4c 3c c9
 
 ;-------------------------------------------------------------------------------
 CharacterCodeTable:
@@ -3542,7 +3537,7 @@ PlanetMask = $7
 
 LoadSky:
 			lda #$05				; $d9a2: a9 05
-			jsr Main_c93c			; $d9a4: 20 3c c9
+			jsr Main_SwitchBank			; $d9a4: 20 3c c9
 			lda v_PlanetID			; $d9a7: ad 58 01
 			sta $017f			; $d9aa: 8d 7f 01
 			and #PlanetMask
@@ -5574,7 +5569,7 @@ GM_SoundTest:
 			jsr ClearScreen			; $e99c: 20 3a c5
 			jsr Main_c581			; $e99f: 20 81 c5
 
-			CrossBankJump 0, Sound_Goto_SetupAPU
+			CrossBankJump Sound_Bank, Sound_Goto_SetupAPU
 
 			ldx #>SoundTest_DrawTexts	; $e9a7: a2 ea
 			ldy #<SoundTest_DrawTexts	; $e9a9: a0 11
@@ -5603,7 +5598,7 @@ _checkB:
 			beq _checkUp	; If not, check button up
 			
 			; Stop music
-			CrossBankJump 0, Sound_Goto_SetupAPU
+			CrossBankJump Sound_Bank, Sound_Goto_SetupAPU
 
 _checkUp:
 			lda Input_RAM
@@ -5713,7 +5708,7 @@ EntryPoint:
 			dex				; $ea6b: ca
 			bne --			; $ea6c: d0 ef
 
-			CrossBankJump 0, Sound_Goto_SetupAPU2
+			CrossBankJump Sound_Bank, Sound_Goto_SetupAPU2
 
 			ldx #$00				; $ea73: a2 00
 			txa				; $ea75: 8a
@@ -5746,7 +5741,7 @@ EntryPoint:
 			lda #$05				; $eaab: a9 05
 			sta $0120			; $eaad: 8d 20 01
 
-			CrossBankJump 0, Sound_Goto_SetupAPU
+			CrossBankJump Sound_Bank, Sound_Goto_SetupAPU
 			jsr SetupPPU
 
 			jsr GM_IntroCredits_Unused			; $eab8: 20 52 f9
@@ -5756,7 +5751,7 @@ Main_eabe:
 			ldx #$ff				; $eabe: a2 ff
 			txs				; $eac0: 9a
 			jsr Main_c581		; Clear sprites
-			CrossBankJump 0, Sound_Goto_SetupAPU
+			CrossBankJump Sound_Bank, Sound_Goto_SetupAPU
 			jsr Main_e8e3			; $eac9: 20 e3 e8
 			lda #$80				; $eacc: a9 80
 			sta $017a			; $eace: 8d 7a 01
@@ -5915,16 +5910,13 @@ Main_ebd2:
 			inc $0157			; $ebe1: ee 57 01
 			jsr Main_c58f			; $ebe4: 20 8f c5
 			jsr Main_c943			; $ebe7: 20 43 c9
-			lda #$01				; $ebea: a9 01
-			jsr Sub_CrossBankJump			; $ebec: 20 0d c9
+			CrossBankJump	PRG01_Bank, PRG01_Goto_81d4
 			lda #$12				; $ebef: a9 12
 			jsr Sub_CrossBankJump			; $ebf1: 20 0d c9
 			lda #$1a				; $ebf4: a9 1a
 			jsr Sub_CrossBankJump			; $ebf6: 20 0d c9
-			lda #$11				; $ebf9: a9 11
-			jsr Sub_CrossBankJump			; $ebfb: 20 0d c9
-			lda #$21				; $ebfe: a9 21
-			jsr Sub_CrossBankJump			; $ec00: 20 0d c9
+			CrossBankJump	PRG01_Bank, PRG01_Goto_b8e4
+			CrossBankJump	PRG01_Bank, PRG01_Goto_801f
 			jsr Main_d408			; $ec03: 20 08 d4
 			jsr Main_c779			; $ec06: 20 79 c7
 			jsr Main_ec48			; $ec09: 20 48 ec
@@ -6449,9 +6441,9 @@ Main_ef76:
 			lda $0e			; $efa8: a5 0e
 			and #$08				; $efaa: 29 08
 			bne Main_efb8			; $efac: d0 0a
-			lda #$00				; $efae: a9 00
-			jsr Main_c93c			; $efb0: 20 3c c9
-			jsr $800d			; $efb3: 20 0d 80
+			lda #Sound_Bank				; $efae: a9 00
+			jsr Main_SwitchBank			; $efb0: 20 3c c9
+			jsr Sound_Goto_Update			; $efb3: 20 0d 80
 			ldx #$00				; $efb6: a2 00
 Main_efb8:
 			dex				; $efb8: ca
@@ -6474,7 +6466,7 @@ Main_efcf:
 			and #$bf				; $efd7: 29 bf
 			sta $0e			; $efd9: 85 0e
 			lda #$03				; $efdb: a9 03
-			jsr Main_c93c			; $efdd: 20 3c c9
+			jsr Main_SwitchBank			; $efdd: 20 3c c9
 			jsr $8004			; $efe0: 20 04 80
 			jmp Main_eff6			; $efe3: 4c f6 ef
 
@@ -6503,7 +6495,7 @@ Main_f003:
 			jsr Main_f05a			; $f003: 20 5a f0
 Main_f006:
 			pla				; $f006: 68
-			jsr Main_c93c			; $f007: 20 3c c9
+			jsr Main_SwitchBank			; $f007: 20 3c c9
 			pla				; $f00a: 68
 			tay				; $f00b: a8
 			pla				; $f00c: 68
@@ -6939,7 +6931,7 @@ GM_TitleScreen:
 			sta $eb			; $f3c3: 85 eb
 
 			lda #$05				; $f3c5: a9 05
-			jsr Main_c93c			; $f3c7: 20 3c c9
+			jsr Main_SwitchBank			; $f3c7: 20 3c c9
 
 			lda #$e8				; $f3ca: a9 e8
 			sta LoadAddress_Low			; $f3cc: 85 a5
@@ -6968,7 +6960,7 @@ GM_TitleScreen:
 			lda #$10				; $f3f5: a9 10
 			sta $0203			; $f3f7: 8d 03 02
 
-			lda #MusID_InternTitle
+			lda #MusID_JapanTitle
 			jsr PlaySound
 
 			ldx #$20				; $f3ff: a2 20
@@ -7296,7 +7288,7 @@ GM_IntroCutscene:
 			jsr Sub_CrossBankJump			; $f633: 20 0d c9
 
 			lda #$05				; $f636: a9 05
-			jsr Main_c93c			; $f638: 20 3c c9
+			jsr Main_SwitchBank			; $f638: 20 3c c9
 			lda #$ea				; $f63b: a9 ea
 			sta LoadAddress_Low			; $f63d: 85 a5
 			lda #$81				; $f63f: a9 81
@@ -7342,7 +7334,7 @@ GM_IntroCutscene:
 			lda #$16				; $f690: a9 16
 			jsr Sub_CrossBankJump			; $f692: 20 0d c9
 			lda #$05				; $f695: a9 05
-			jsr Main_c93c			; $f697: 20 3c c9
+			jsr Main_SwitchBank			; $f697: 20 3c c9
 			LoadAddress $81ec	; TODO: find out an actual label
 			ldy #$00				; $f6a2: a0 00
 			lda (LoadedAddress),y		; $f6a4: b1 a5
@@ -7439,7 +7431,7 @@ GM_IntroCutscene:
 			lda #$16				; $f766: a9 16
 			jsr Sub_CrossBankJump			; $f768: 20 0d c9
 			lda #$05				; $f76b: a9 05
-			jsr Main_c93c			; $f76d: 20 3c c9
+			jsr Main_SwitchBank			; $f76d: 20 3c c9
 			LoadAddress $81ee	; TODO: find out an actual label
 			ldy #$00				; $f778: a0 00
 			lda (LoadedAddress),y		; $f77a: b1 a5
@@ -7481,7 +7473,7 @@ GM_IntroCutscene:
 			lda #$16				; $f7c8: a9 16
 			jsr Sub_CrossBankJump			; $f7ca: 20 0d c9
 			lda #$05				; $f7cd: a9 05
-			jsr Main_c93c			; $f7cf: 20 3c c9
+			jsr Main_SwitchBank			; $f7cf: 20 3c c9
 			LoadAddress $81f0	; TODO: find out an actual label
 			ldy #$00				; $f7da: a0 00
 			lda (LoadedAddress),y		; $f7dc: b1 a5
@@ -8506,7 +8498,7 @@ Main_ffd8:
 			.byte $00 ; $ffda
 			.byte $00 ; $ffdb
 			.byte $00 ; $ffdc
-			.byte $4c, $00, $c0 ; $ffdd
+			jmp reset
 			.byte $47, $4f ; $ffe0
 			.byte $44, $5a ; $ffe2
 			.byte $49, $4c ; $ffe4
