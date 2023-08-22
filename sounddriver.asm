@@ -18,37 +18,86 @@ CSF_HeaderStart .function end_label
 			.byte (end_label-*-1)/10
 		.endf
 
-CSF_Pulse .macro duty, env_loop, cvolume, volume
+CSF_HeaderChID .segment id
+HCSF_CHANNEL_ID .var \id
+		.endsegment
+
+CSF_HeaderInitLoop .segment loop_count
+HCSF_CHANNEL_LOOP .var \loop_count
+		.endsegment
+
+CSF_HeaderInitVoice .segment voice
+HCSF_INIT_VOICE .var \voice
+		.endsegment
+
+CSF_HeaderPitch .segment pitch
+HCSF_PITCH .var \pitch
+		.endsegment
+
+CSF_HeaderTempo .segment tempo
+HCSF_TEMPO .var \tempo
+		.endsegment
+
+CSF_HeaderPulseSetup .segment duty, env_loop, cvolume, volume
 			.cerror \duty > 3 || \env_loop > 1 || \cvolume > 1 || \volume > 15, "Invalid value"
-			.byte \duty << 6 | \env_loop << 5 | \cvolume << 4 | \volume
-		.endm
+HCSF_PULSE_SETUP .var \duty << 6 | \env_loop << 5 | \cvolume << 4 | \volume
+		.endsegment
 
-CSF_PulseSweep .macro enable, period, negate, shift_count
+CSF_HeaderPulseSweep .segment enable, period, negate, shift_count
 			.cerror \enable > 1 || \period > 7 || \negate > 1 || \shift_count > 7, "Invalid value"
-			.byte \enable << 7 | \period << 4 | \negate << 3 | \shift_count
-		.endm
-		
-CSF_InitialVoice .macro voice
-			.byte \voice
-		.endm
+HCSF_PULSE_SWEEP .var \enable << 7 | \period << 4 | \negate << 3 | \shift_count
+		.endsegment
+	
+CSF_HeaderPulse .segment id, address
+			.cerror \id < 1 || \id > 2, "Invalid pulse channel"
+			.byte HCSF_CHANNEL_ID, HCSF_CHANNEL_LOOP
+			.byte HCSF_PULSE_SETUP, HCSF_INIT_VOICE
+			.byte HCSF_PULSE_SWEEP
+			.byte HCSF_PITCH, HCSF_TEMPO, \id-1
+			.addr \address
+		.endsegment
 
-CSF_Pitch .macro pitch
-			.byte \pitch
-		.endm
+CSF_HeaderTriSetup .segment c_flag, linear_load, unk
+			.cerror \c_flag > 1 || \linear_load > $7f, "Invalid value"
+HCSF_TRI_SETUP .var \c_flag << 7 | \linear_load
+HCSF_TRI_UNK .var \unk
+		.endsegment
 
-CSF_Tempo .macro tempo
-			.byte \tempo
-		.endm
+CSF_HeaderTriangle .segment address
+			.byte HCSF_CHANNEL_ID, HCSF_CHANNEL_LOOP
+			.byte HCSF_TRI_SETUP, HCSF_INIT_VOICE
+			.byte HCSF_TRI_UNK
+			.byte HCSF_PITCH, HCSF_TEMPO, $02
+			.addr \address
+		.endsegment
+
+CSF_HeaderNoiseSetup .segment env_loop, cvolume, volume, unk
+			.cerror \env_loop > 1 || \cvolume > 1 || \volume > $f, "Invalid value"
+HCSF_NOISE_SETUP .var \env_loop << 5 | \cvolume << 4 | \volume
+HCSF_NOISE_UNK .var \unk
+		.endsegment
+
+CSF_HeaderNoise .segment address
+			.byte HCSF_CHANNEL_ID, HCSF_CHANNEL_LOOP
+			.byte HCSF_NOISE_SETUP, HCSF_INIT_VOICE
+			.byte HCSF_NOISE_UNK
+			.byte HCSF_PITCH, HCSF_TEMPO, $03
+			.addr \address
+		.endsegment
 
 ;	Track commands
 
-CSF_SetSpeedDivider	.macro dv
+CSF_SetDelay .macro dv
 			.byte $e0 | \dv
 		.endm
 		
 CSF_Jump .function address
 			.byte $80
 			.addr address
+		.endf
+
+CSF_SetLoopCount .function count
+			.byte $8d, $70, count
 		.endf
 
 CSF_Loop .function address
@@ -1655,11 +1704,11 @@ Sound_VoiceBank:
 
 ; Supposedly an empty music track
 Music_Empty:
-			CSF_HeaderStart _ChannelListEnd
+			CSF_HeaderStart _HeaderEnd
 			.byte $06, $01, $3f, $00
 			.byte $00, $00, $7f, $00	; $8b57: 00 00 7f 00	 Data
 			.addr +
-_ChannelListEnd
+_HeaderEnd
 
 +			.byte $25, $e2
 			.byte $27, $29, $2c, $31	; $8b5f: 27 29 2c 31	 Data
@@ -1753,45 +1802,64 @@ SFXID_AnguirusRoar:	TableInsert $bd10
 Sound_SoundTable:	.addr CurrentTable
 
 Music_JapanTitle:
-			CSF_HeaderStart _ChannelListEnd
+			CSF_HeaderStart _HeaderEnd
 			
-	;	TODO: macro for channels?
-			.byte $00, $01
-			CSF_Pulse	2, 1, 1, 15
-			CSF_InitialVoice $04
-			CSF_PulseSweep 0, 0, 0, 0
-			CSF_Pitch $f7
-			CSF_Tempo $78
-			.byte $00
-			.addr _channel1
-			.byte $01, $01, $7f, $04
-			.byte $41, $03, $78, $02
-			.addr _channel2
-			.byte $02, $01, $7f, $02
-			.byte $00, $03, $78, $01
-			.addr _channel3
-			.byte $03, $02, $3b, $04
-			.byte $00, $00, $78, $03
-			.addr _noise
+			; Pulse 1
+			CSF_HeaderChID 0
+			CSF_HeaderInitLoop 1
+			CSF_HeaderPulseSetup 2, 1, 1, 15
+			CSF_HeaderInitVoice 4
+			CSF_HeaderPulseSweep 0, 0, 0, 0
+			CSF_HeaderPitch $f7
+			CSF_HeaderTempo $78
+			CSF_HeaderPulse 1, _pulse1
 
-_ChannelListEnd
+			; Triangle
+			CSF_HeaderChID 1
+			CSF_HeaderInitLoop 1
+			CSF_HeaderTriSetup 0, $7f, $41
+			CSF_HeaderInitVoice 4
+			CSF_HeaderPitch $03
+			CSF_HeaderTempo $78
+			CSF_HeaderTriangle _triangle
 
-_channel1:
+			; Pulse 2
+			CSF_HeaderChID 2
+			CSF_HeaderInitLoop 1
+			CSF_HeaderPulseSetup 1, 1, 1, 15
+			CSF_HeaderInitVoice 2
+			CSF_HeaderPulseSweep 0, 0, 0, 0
+			CSF_HeaderPitch 3
+			CSF_HeaderTempo $78
+			CSF_HeaderPulse 2, _pulse2
+
+			; Noise
+			CSF_HeaderChID 3
+			CSF_HeaderInitLoop 2
+			CSF_HeaderNoiseSetup 1, 1, $B, 0
+			CSF_HeaderInitVoice 4
+			CSF_HeaderPitch 0
+			CSF_HeaderTempo $78
+			CSF_HeaderNoise _noise
+
+_HeaderEnd
+
+_pulse1:
 			CSF_SetVoice $04
 			.byte $23
-			CSF_SetSpeedDivider 1
+			CSF_SetDelay 1
 			.byte $24
-			CSF_SetSpeedDivider 0
+			CSF_SetDelay 0
 			.byte $0b
 			CSF_Command $8a, $ff
 			.byte $18
-			CSF_SetSpeedDivider 8
+			CSF_SetDelay 8
 			.byte $18, $18, $18
 			.byte $18, $18, $18
 _ch1_loop:
 			CSF_SetVoice $07
 			CSF_Command $8a, $01
-			CSF_CommandFiller $8d, $02
+			CSF_SetLoopCount 2
 -
 			.byte $25, $e5, $24, $22	; $8c54: 25 e5 24 22	 Data
 			.byte $e8, $25, $e5, $24	; $8c58: e8 25 e5 24	 Data
@@ -1841,14 +1909,13 @@ _ch1_loop:
 			CSF_Jump _ch1_loop
 			CSF_Stop
 
-_channel2:
+_triangle:
 			CSF_SetVoice $04
 			.byte $1d, $e8	; $8cf0: 88 04 1d e8	 Data
 			.byte $00, $ed, $00, $ee	; $8cf4: 00 ed 00 ee	 Data
 _ch2_loop:
 			CSF_SetVoice $07
-			.byte $8d, $70	; $8cf8: 88 07 8d 70	 Data
-			.byte $03
+			CSF_SetLoopCount 3
 -
 			.byte $00, $ee, $00	; $8cfc: 03 00 ee 00	 Data
 			.byte $00, $e8
@@ -1856,7 +1923,7 @@ _ch2_loop:
 
 			.byte $00, $ee	; $8d04: fd 8c 00 ee	 Data
 			.byte $00, $00, $83, $43	; $8d08: 00 00 83 43	 Data
-			.byte $8d, $70, $02
+			CSF_SetLoopCount 2
 -
 			.byte $31
 			.byte $e5, $30, $2e, $e8	; $8d10: e5 30 2e e8	 Data
@@ -1865,7 +1932,7 @@ _ch2_loop:
 			.byte $2e, $2c, $2e, $30	; $8d1c: 2e 2c 2e 30	 Data
 			.byte $31, $30, $2e, $e8	; $8d20: 31 30 2e e8	 Data
 			CSF_Loop -
-			.byte $8d, $70, $01
+			CSF_SetLoopCount 1
 -
 			.byte $33
 			.byte $e5, $31, $30, $e8	; $8d2c: e5 31 30 e8	 Data
@@ -1890,11 +1957,11 @@ _ch2_loop:
 			CSF_Jump _ch2_loop
 			CSF_Stop
 
-_channel3:
+_pulse2:
 			.byte $00, $ee
 			.byte $00
 _ch3_loop:
-			.byte $8d, $70, $02	; $8d6c: 00 8d 70 02	 Data
+			CSF_SetLoopCount 2
 -
 			.byte $16, $e8, $16, $16	; $8d70: 16 e8 16 16	 Data
 			.byte $16, $16, $16, $e5	; $8d74: 16 16 16 e5	 Data
@@ -1911,7 +1978,8 @@ _ch3_loop:
 			.byte $18, $18, $18, $e5	; $8d98: 18 18 18 e5	 Data
 			.byte $18, $18, $1b, $e8	; $8d9c: 18 18 1b e8	 Data
 			.byte $19, $18, $16, $e5	; $8da0: 19 18 16 e5	 Data
-			.byte $8d, $70, $02
+
+			CSF_SetLoopCount 2
 -
 			.byte $16	; $8da4: 8d 70 02 16	 Data
 			.byte $e8, $16, $16, $16	; $8da8: e8 16 16 16	 Data
