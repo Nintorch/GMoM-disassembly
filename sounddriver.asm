@@ -47,7 +47,7 @@ CSF_HeaderPulseSweep .segment enable, period, negate, shift_count
 			.cerror \enable > 1 || \period > 7 || \negate > 1 || \shift_count > 7, "Invalid value"
 HCSF_PULSE_SWEEP .var \enable << 7 | \period << 4 | \negate << 3 | \shift_count
 		.endsegment
-	
+
 CSF_HeaderPulse .segment id, address
 			.cerror \id < 1 || \id > 2, "Invalid pulse channel"
 			.byte HCSF_CHANNEL_ID, HCSF_CHANNEL_LOOP
@@ -87,10 +87,8 @@ CSF_HeaderNoise .segment address
 
 ;	Track commands
 
-CSF_SetDelay .macro dv
-			.byte $e0 | \dv
-		.endm
-		
+cDelay	.sfunction d, $e0 | d
+
 CSF_Jump .function address
 			.byte $80
 			.addr address
@@ -234,7 +232,7 @@ Sound_809e:
 			bne Sound_80ac			; $80a7: d0 03
 			jsr Sound_8228			; $80a9: 20 28 82
 Sound_80ac:
-			jsr Sound_856d			; $80ac: 20 6d 85
+			jsr Sound_LoadVoice			; $80ac: 20 6d 85
 			jsr Sound_85ed			; $80af: 20 ed 85
 			jsr Sound_864a			; $80b2: 20 4a 86
 			lda $0369,x		; $80b5: bd 69 03
@@ -506,7 +504,7 @@ Sound_ReadCommand:
 			TableStart
 			TableInsert Sound_CmdJump	; $80
 			TableInsert Sound_CmdLoop	; $81
-			TableInsert Sound_CmdStop		
+			TableInsert Sound_CmdStop
 			TableInsert Sound_82d7
 			TableInsert Sound_8321
 			TableInsert Sound_82d0
@@ -1012,7 +1010,7 @@ Sound_854f:
 			lda $0362,x		; $8552: bd 62 03
 			clc				; $8555: 18
 			php				; $8556: 08
-			adc Sound_880e,y			; $8557: 79 0e 88
+			adc Sound_880f-1,y			; $8557: 79 0e 88
 			sta $03b6,x		; $855a: 9d b6 03
 			lda Sound_880f,y			; $855d: b9 0f 88
 			adc #$00				; $8560: 69 00
@@ -1025,7 +1023,7 @@ Sound_854f:
 			rts				; $856c: 60
 
 ;-------------------------------------------------------------------------------
-Sound_856d:
+Sound_LoadVoice:
 			lda $032a,x		; $856d: bd 2a 03
 			beq Sound_85a4			; $8570: f0 32
 			asl				; $8572: 0a
@@ -1441,9 +1439,7 @@ Sound_87d3:
 			lda $0316			; $8805: ad 16 03
 			clc				; $8808: 18
 			adc $0338,x		; $8809: 7d 38 03
-			.byte $9d, $38	; $880c: 9d 38	 Suspected data
-Sound_880e:
-			.byte $03	; $880e: 03		Suspected data
+			sta $0338,x
 Sound_880f:
 			lda $03a8,x		; $880f: bd a8 03
 			sta $d4			; $8812: 85 d4
@@ -1573,19 +1569,35 @@ Sound_895f:
 			.byte $08, $fc, $0a, $f5	; $8962: 08 fc 0a f5	 Data
 			.byte $00, $07, $f7, $0c	; $8966: 00 07 f7 0c	 Data
 			.byte $fb, $00, $08, $f4	; $896a: fb 00 08 f4	 Data
-			; TODO: table of voices
-Sound_VoiceBank:
-			.byte $00	; $896e: 00			Data
-			.byte $82, $90, $89, $ad	; $896f: 82 90 89 ad	 Data
-			.byte $89, $b8, $89, $c1	; $8973: 89 b8 89 c1	 Data
-			.byte $89, $ea, $89, $f9	; $8977: 89 ea 89 f9	 Data
-			.byte $89, $16, $8a, $34	; $897b: 89 16 8a 34	 Data
-			.byte $8a, $42, $8a, $7c	; $897f: 8a 42 8a 7c	 Data
-			.byte $8a, $41, $8a, $89	; $8983: 8a 41 8a 89	 Data
-			.byte $8a, $a2, $8a, $cc	; $8987: 8a a2 8a cc	 Data
-			.byte $8a, $d2, $8a, $2c	; $898b: 8a d2 8a 2c	 Data
-			.byte $8b
 
+;-------------------------------------------------------------------------------
+;	Voice Bank
+;	A voice is basically how volume of a note is changed when it's played
+;	Voice 0 doesn't change the volume, it remains constant
+;-------------------------------------------------------------------------------
+
+Sound_VoiceBank:
+			.addr $8200
+			.addr Sound_Voice01
+			.addr Sound_Voice02
+			.addr Sound_Voice03
+			.addr Sound_Voice04
+			.addr Sound_Voice05
+			.addr Sound_Voice06
+			.addr Sound_Voice07
+			.addr Sound_Voice08
+			.addr Sound_Voice09
+			.addr Sound_Voice0A
+			.addr Sound_Voice0B
+			.addr Sound_Voice0C
+			.addr Sound_Voice0D
+			.addr Sound_Voice0E
+			.addr Sound_Voice0F
+			.addr Sound_Voice10
+
+Voice_End = $80
+
+Sound_Voice01:
 			.byte $00, $0f, $83	; $898f: 8b 00 0f 83	 Data
 			.byte $0e, $0d, $0b, $0b	; $8993: 0e 0d 0b 0b	 Data
 			.byte $0a, $0a, $09, $09	; $8997: 0a 0a 09 09	 Data
@@ -1593,12 +1605,21 @@ Sound_VoiceBank:
 			.byte $08, $07, $07, $07	; $899f: 08 07 07 07	 Data
 			.byte $07, $06, $06, $06	; $89a3: 07 06 06 06	 Data
 			.byte $06, $05, $04, $03	; $89a7: 06 05 04 03	 Data
-			.byte $00, $80, $0f, $0d	; $89ab: 00 80 0f 0d	 Data
+			.byte $00, Voice_End
+
+Sound_Voice02:
+			.byte $0f, $0d	; $89ab: 00 80 0f 0d	 Data
 			.byte $0b, $0a, $09, $08	; $89af: 0b 0a 09 08	 Data
 			.byte $07, $06, $04, $00	; $89b3: 07 06 04 00	 Data
-			.byte $80, $0f, $0b, $09	; $89b7: 80 0f 0b 09	 Data
+			.byte Voice_End
+
+Sound_Voice03:
+			.byte $0f, $0b, $09	; $89b7: 80 0f 0b 09	 Data
 			.byte $08, $07, $06, $04	; $89bb: 08 07 06 04	 Data
-			.byte $00, $80, $0f, $0f	; $89bf: 00 80 0f 0f	 Data
+			.byte $00, Voice_End
+
+Sound_Voice04:
+			.byte $0f, $0f	; $89bf: 00 80 0f 0f	 Data
 			.byte $0e, $0d, $0c, $0b	; $89c3: 0e 0d 0c 0b	 Data
 			.byte $0a, $0a, $0a, $09	; $89c7: 0a 0a 0a 09	 Data
 			.byte $09, $09, $09, $09	; $89cb: 09 09 09 09	 Data
@@ -1608,18 +1629,27 @@ Sound_VoiceBank:
 			.byte $06, $06, $05, $05	; $89db: 06 06 05 05	 Data
 			.byte $05, $04, $04, $04	; $89df: 05 04 04 04	 Data
 			.byte $03, $03, $03, $02	; $89e3: 03 03 03 02	 Data
-			.byte $02, $00, $80, $0b	; $89e7: 02 00 80 0b	 Data
+			.byte $02, $00, Voice_End
+
+Sound_Voice05:
+			.byte $0b	; $89e7: 02 00 80 0b	 Data
 			.byte $0d, $0f, $0f, $0e	; $89eb: 0d 0f 0f 0e	 Data
 			.byte $0d, $0c, $0b, $0a	; $89ef: 0d 0c 0b 0a	 Data
 			.byte $0a, $09, $09, $08	; $89f3: 0a 09 09 08	 Data
-			.byte $07, $80, $00, $0f	; $89f7: 07 80 00 0f	 Data
+			.byte $07, Voice_End
+
+Sound_Voice06:
+			.byte $00, $0f	; $89f7: 07 80 00 0f	 Data
 			.byte $83, $0d, $0d, $0d	; $89fb: 83 0d 0d 0d	 Data
 			.byte $0d, $0d, $0c, $0c	; $89ff: 0d 0d 0c 0c	 Data
 			.byte $0c, $0c, $0c, $0b	; $8a03: 0c 0c 0c 0b	 Data
 			.byte $0b, $0b, $0b, $0a	; $8a07: 0b 0b 0b 0a	 Data
 			.byte $09, $08, $07, $06	; $8a0b: 09 08 07 06	 Data
 			.byte $05, $04, $03, $02	; $8a0f: 05 04 03 02	 Data
-			.byte $01, $00, $80, $06	; $8a13: 01 00 80 06	 Data
+			.byte $01, $00, Voice_End
+
+Sound_Voice07:
+			.byte $06	; $8a13: 01 00 80 06	 Data
 			.byte $0a, $0e, $0f, $0f	; $8a17: 0a 0e 0f 0f	 Data
 			.byte $0f, $0f, $0f, $0f	; $8a1b: 0f 0f 0f 0f	 Data
 			.byte $0f, $0f, $0f, $0f	; $8a1f: 0f 0f 0f 0f	 Data
@@ -1627,10 +1657,19 @@ Sound_VoiceBank:
 			.byte $0e, $0d, $0c, $0b	; $8a27: 0e 0d 0c 0b	 Data
 			.byte $0b, $0b, $0a, $0a	; $8a2b: 0b 0b 0a 0a	 Data
 			.byte $0a, $09, $09, $08	; $8a2f: 0a 09 09 08	 Data
-			.byte $80, $06, $09, $0b	; $8a33: 80 06 09 0b	 Data
+			.byte Voice_End
+
+Sound_Voice08:
+			.byte $06, $09, $0b	; $8a33: 80 06 09 0b	 Data
 			.byte $0c, $0e, $0f, $0f	; $8a37: 0c 0e 0f 0f	 Data
 			.byte $0e, $0c, $0a, $09	; $8a3b: 0e 0c 0a 09	 Data
-			.byte $08, $80, $00, $0f	; $8a3f: 08 80 00 0f	 Data
+			.byte $08, Voice_End
+
+Sound_Voice0B:
+			.byte $00
+			; Fall through to voice 09
+Sound_Voice09:
+			.byte $0f	; $8a3f: 08 80 00 0f	 Data
 			.byte $0f, $0e, $0d, $0c	; $8a43: 0f 0e 0d 0c	 Data
 			.byte $0b, $0a, $0a, $09	; $8a47: 0b 0a 0a 09	 Data
 			.byte $09, $09, $09, $09	; $8a4b: 09 09 09 09	 Data
@@ -1645,16 +1684,25 @@ Sound_VoiceBank:
 			.byte $03, $03, $03, $03	; $8a6f: 03 03 03 03	 Data
 			.byte $03, $03, $02, $02	; $8a73: 03 03 02 02	 Data
 			.byte $02, $02, $02, $01	; $8a77: 02 02 02 01	 Data
-			.byte $80, $08, $0a, $0c	; $8a7b: 80 08 0a 0c	 Data
+			.byte Voice_End
+
+Sound_Voice0A:
+			.byte $08, $0a, $0c	; $8a7b: 80 08 0a 0c	 Data
 			.byte $0e, $0f, $0f, $0e	; $8a7f: 0e 0f 0f 0e	 Data
 			.byte $0d, $0c, $0b, $0b	; $8a83: 0d 0c 0b 0b	 Data
-			.byte $0a, $80, $00, $0f	; $8a87: 0a 80 00 0f	 Data
+			.byte $0a, Voice_End
+
+Sound_Voice0C:
+			.byte $00, $0f	; $8a87: 0a 80 00 0f	 Data
 			.byte $0f, $0d, $0b, $0a	; $8a8b: 0f 0d 0b 0a	 Data
 			.byte $0a, $09, $09, $09	; $8a8f: 0a 09 09 09	 Data
 			.byte $09, $08, $08, $07	; $8a93: 09 08 08 07	 Data
 			.byte $07, $06, $06, $06	; $8a97: 07 06 06 06	 Data
 			.byte $05, $05, $04, $03	; $8a9b: 05 05 04 03	 Data
-			.byte $02, $00, $80, $0f	; $8a9f: 02 00 80 0f	 Data
+			.byte $02, $00, Voice_End
+
+Sound_Voice0D:
+			.byte $0f	; $8a9f: 02 00 80 0f	 Data
 			.byte $0f, $0f, $0e, $0e	; $8aa3: 0f 0f 0e 0e	 Data
 			.byte $0d, $0d, $0c, $0c	; $8aa7: 0d 0d 0c 0c	 Data
 			.byte $0c, $0c, $0c, $0c	; $8aab: 0c 0c 0c 0c	 Data
@@ -1665,8 +1713,14 @@ Sound_VoiceBank:
 			.byte $07, $07, $07, $06	; $8abf: 07 07 07 06	 Data
 			.byte $06, $06, $05, $04	; $8ac3: 06 06 05 04	 Data
 			.byte $03, $02, $01, $00	; $8ac7: 03 02 01 00	 Data
-			.byte $80, $07, $07, $05	; $8acb: 80 07 07 05	 Data
-			.byte $04, $00, $80, $0f	; $8acf: 04 00 80 0f	 Data
+			.byte Voice_End
+
+Sound_Voice0E:
+			.byte $07, $07, $05	; $8acb: 80 07 07 05	 Data
+			.byte $04, $00, Voice_End
+
+Sound_Voice0F:
+			.byte $0f	; $8acf: 04 00 80 0f	 Data
 			.byte $0f, $0d, $0c, $0a	; $8ad3: 0f 0d 0c 0a	 Data
 			.byte $08, $0d, $0e, $08	; $8ad7: 08 0d 0e 08	 Data
 			.byte $08, $0a, $06, $0e	; $8adb: 08 0a 06 0e	 Data
@@ -1689,7 +1743,10 @@ Sound_VoiceBank:
 			.byte $0f, $0f, $0e, $0e	; $8b1f: 0f 0f 0e 0e	 Data
 			.byte $0f, $0b, $0a, $0a	; $8b23: 0f 0b 0a 0a	 Data
 			.byte $08, $09, $03, $00	; $8b27: 08 09 03 00	 Data
-			.byte $80, $0f, $0e, $0c	; $8b2b: 80 0f 0e 0c	 Data
+			.byte Voice_End
+
+Sound_Voice10:
+			.byte $0f, $0e, $0c	; $8b2b: 80 0f 0e 0c	 Data
 			.byte $0a, $08, $06, $05	; $8b2f: 0a 08 06 05	 Data
 			.byte $0e, $0c, $0a, $08	; $8b33: 0e 0c 0a 08	 Data
 			.byte $0a, $06, $05, $0f	; $8b37: 0a 06 05 0f	 Data
@@ -1698,7 +1755,7 @@ Sound_VoiceBank:
 			.byte $06, $09, $07, $09	; $8b43: 06 09 07 09	 Data
 			.byte $07, $0f, $0a, $0e	; $8b47: 07 0f 0a 0e	 Data
 			.byte $08, $06, $09, $0f	; $8b4b: 08 06 09 0f	 Data
-			.byte $0a, $00, $80
+			.byte $0a, $00, Voice_End
 
 ;-------------------------------------------------------------------------------
 
@@ -1803,7 +1860,7 @@ Sound_SoundTable:	.addr CurrentTable
 
 Music_JapanTitle:
 			CSF_HeaderStart _HeaderEnd
-			
+
 			; Pulse 1
 			CSF_HeaderChID 0
 			CSF_HeaderInitLoop 1
@@ -1846,17 +1903,14 @@ _HeaderEnd
 
 _pulse1:
 			CSF_SetVoice $04
-			.byte $23
-			CSF_SetDelay 1
-			.byte $24
-			CSF_SetDelay 0
+			.byte $23, cDelay(1), $24, cDelay(0)
 			.byte $0b
 			CSF_Command $8a, $ff
-			.byte $18
-			CSF_SetDelay 8
+			.byte $18, cDelay(8)
 			.byte $18, $18, $18
 			.byte $18, $18, $18
-_ch1_loop:
+_pulse1_loop:
+		.warn *
 			CSF_SetVoice $07
 			CSF_Command $8a, $01
 			CSF_SetLoopCount 2
@@ -1906,14 +1960,14 @@ _ch1_loop:
 			.byte $8a, $ff, $18, $e8	; $8ce0: 8a ff 18 e8	 Data
 			.byte $18, $18, $18, $18	; $8ce4: 18 18 18 18	 Data
 			.byte $18, $18, $8a, $01	; $8ce8: 18 18 8a 01	 Data
-			CSF_Jump _ch1_loop
+			CSF_Jump _pulse1_loop
 			CSF_Stop
 
 _triangle:
 			CSF_SetVoice $04
 			.byte $1d, $e8	; $8cf0: 88 04 1d e8	 Data
 			.byte $00, $ed, $00, $ee	; $8cf4: 00 ed 00 ee	 Data
-_ch2_loop:
+_triangle_loop:
 			CSF_SetVoice $07
 			CSF_SetLoopCount 3
 -
@@ -1954,13 +2008,13 @@ _ch2_loop:
 			.byte $00, $29, $00, $ed	; $8d5c: 00 29 00 ed	 Data
 			.byte $29, $e8, $00, $ed	; $8d60: 29 e8 00 ed	 Data
 			.byte $00, $ee
-			CSF_Jump _ch2_loop
+			CSF_Jump _triangle_loop
 			CSF_Stop
 
 _pulse2:
 			.byte $00, $ee
 			.byte $00
-_ch3_loop:
+_pulse2_loop:
 			CSF_SetLoopCount 2
 -
 			.byte $16, $e8, $16, $16	; $8d70: 16 e8 16 16	 Data
@@ -1996,7 +2050,7 @@ _ch3_loop:
 			.byte $16, $e5, $18, $e8	; $8dcc: 16 e5 18 e8	 Data
 			.byte $00, $ed, $00, $ee	; $8dd0: 00 ed 00 ee	 Data
 			.byte $00, $00, $00
-			CSF_Jump _ch3_loop
+			CSF_Jump _pulse2_loop
 			CSF_Stop
 
 _noise:
@@ -2004,13 +2058,13 @@ _noise:
 			.byte $ee, $00, $ed, $00	; $8ddc: ee 00 ed 00	 Data
 			.byte $e5, $c0, $e3, $c0	; $8de0: e5 c0 e3 c0	 Data
 			.byte $8a, $fb
--
+_noise_loop:
 			.byte $c0, $e5	; $8de4: 8a fb c0 e5	 Data
 			.byte $c0, $8a, $05, $c0	; $8de8: c0 8a 05 c0	 Data
 			.byte $8a, $fb, $c0, $c0	; $8dec: 8a fb c0 c0	 Data
 			.byte $c0, $8a, $05, $c0	; $8df0: c0 8a 05 c0	 Data
 			.byte $8a, $fb, $c0
-			CSF_Jump -
+			CSF_Jump _noise_loop
 
 			CSF_Stop
 
