@@ -1,5 +1,5 @@
 # Godzilla: Monster of Monsters disassembly
-This project is not for JustMe's portfolio purposes.
+This project is not for Nintorch's portfolio purposes.
 
 A (WIP) disassembly of the "Godzilla: Monster of Monsters" (USA/international version) game on the NES.
 
@@ -23,7 +23,7 @@ There are a lot of TODOs, not-yet-decompiled code and most of the code and data
 still needs to be documented.
 
 ## Credits
-* JustMe (JustMeCodes) - Idea and the main maintainer of the disassembly
+* Nintorch - Idea and the main maintainer of the disassembly
 * frantik - Disasm6 NES disassembler
 * FCEUX team - FCEUX emulator
 * SourMesen - Mesen emulator
